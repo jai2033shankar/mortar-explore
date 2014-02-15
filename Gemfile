@@ -13,4 +13,6 @@ gem 'json'
 
 group :development do
   gem 'rake'
+  gem 'therubyracer'
+  gem 'less'
 end

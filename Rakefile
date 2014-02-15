@@ -35,6 +35,7 @@ task :watch => [:verify, :install] do
       puts file 
     end
     Rake::Task["install"].execute
+    Rake::Task["lessc"].execute
     print "Watching #{PLUGIN_NAME} for changes... "
     STDOUT.flush
   end
@@ -89,3 +90,38 @@ end
 trap("INT") do
   @listener.stop if @listener
 end
+
+
+
+# compile less
+require 'rubygems'
+require 'less'
+require 'rake'
+ 
+SOURCE = "."
+LESS = "public/css/less/"
+CSS = "public/css/"
+CONFIG = {
+  'less'   => LESS,
+  'css'    => CSS,
+  'input'  => "main.less",
+  'output' => "main.css"
+}
+ 
+desc "Compile Less"
+task :lessc do
+  less   = CONFIG['less']
+
+  input  = File.join( less, CONFIG['input'] )
+  output = File.join( CONFIG['css'], CONFIG['output'] )
+
+  source = File.open( input, "r" ).read
+
+  parser = Less::Parser.new( :paths => [less] )
+  tree = parser.parse( source )
+  puts "Rebuilding Less files"
+
+  File.open( output, "w+" ) do |f|
+    f.puts tree.to_css( :compress => true )
+  end
+end 
