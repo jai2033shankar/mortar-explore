@@ -1,0 +1,58 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <title>Mortar - Explore</title>
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="libs/jquery-1.11.0.min.js"></script>
+    <script src="libs/tooltip.js"></script>
+    <!--<script src="libs/jquery.tablesorter.min.js"></script>-->
+      <script type="text/javascript">
+        var MODE = "<%= settings.mode %>" || ''
+
+        <% if settings.mode == "recsys" %>
+          var IMAGE_URL = "<%= settings.image_url %>";
+          var ITEM_URL = "<%= settings.item_url %>";
+          var ITEM_KEY = "<%= settings.item_key %>";
+          var RECOMMENDATION_KEY = "<%= settings.recommendation_key %>";
+          var RANK_KEY = "<%= settings.rank_key %>";
+        <% end %>
+
+      </script>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <div class="row">
+            <div class="span12">
+              <a class="brand" href="#browse"><img class="logo" src="images/mortar_logo.png"></a>
+              <ul class="nav pull-left" id="explore_nav" >
+                <li id="browse_item"><a href="#browse">Browse</a></li>
+                <% if settings.mode != "cloud" %>
+                  <li id="search_item"><a href="#search">Search</a></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+
+    <div class="container" id="explore_container">
+      <div class="explore_content" id="browse_content">
+        <%= @browse_template %>
+      </div>
+    <% if settings.mode != "cloud" %>
+      <div class="explore_content" id="search_content">
+        <%= @search_template %>
+      </div>
+    <% end %>
+      <div class="explore_content" id="detail_content">
+        <%= @detail_template %>
+      </div>
+    </div>
+  </body>
+  <script src="bin/main.js"></script>
+</html>

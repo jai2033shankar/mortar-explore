@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <li id="detail_base"></li>
+      <li>></li>
+      <li id="detail_id"></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <div class="panel">
+      <h1>Selected Item Information</h1>
+      <div class="well">
+        <img class="thumbnail"  onerror="this.src='images/default.png'" id="item_img"></img>
+        <p class="text-crop"><small>Image URL: <span id="image_link_text"></span></small></p>
+        <hr/>
+        <p>Item ID: <span id="item_id_text"></span></p>
+        <p class="text-crop" id="item_link_p"><small>Item URL: <span id="item_link_text"></span></small></p>
+        <a target="_blank" class="center" id="item_link">To Item Page</a>
+      </div>
+    </div>
+    <div class="panel">
+      <h1>Configuration</h1>
+      <label class="" for="item_select">"From" Item (Recommended For)<i data-toggle="tooltip" title="From Item (Recommended For) - this selects the data column in your output that corresponds to the from item or item for which recommendations are being generated. In the standard recommendation system output, this will be column1" class="icon-question-sign"></i></label>
+      <select type="" class="span3"id="item_select"></select>
+      <label class="" for="recommendation_select">"To" Item (Recommended To)<i data-toggle="tooltip" title="To Item (Recommendation) - this selects the data column in your output that corresponds to the to item for the generated recommendations. This will be used in the crafted URL. In the standard recommendation system output, this will be column2"class="icon-question-sign"></i></label>
+      <select type="" class="span3"id="recommendation_select"></select>
+      <label class="" for="rank_select">Rank<i data-toggle="tooltip" title="Rank Column - this selects the data column in your output that corresponds to the rank of the recommended item's. This is displayed in the recommendations. In the standard recommendation system output, this will be column5" class="icon-question-sign"></i></label>
+      <select type="" class="span3"id="rank_select"></select>
+      <label class="" for="image_url">Image URL<i data-toggle="tooltip" title="The url that links to your images.  Ensure that your URL has a ID tag, #{id}, which is replaced with your item ID.  The url must begin with 'http://'. Example: 'http://mywebsite.com/images/#{id}" class="icon-question-sign"></i></label>
+      <input type="text" class="span6"id="image_url">
+      <label class="" for="item_url">Item URL<i data-toggle="tooltip" title="The url that links to your images.  Ensure that your URL has a ID tag, #{id}, which is replaced with your item ID.  The url must begin with 'http://' Example: 'http://mywebsite.com/#{id}" class="icon-question-sign"></i></label>
+      <input type="text" class="span6" id="item_url">
+      <button class="btn btn-primary" id="update_url" type="button">Apply URL Changes</button>
+    </div>
+  </div>
+  <div class="span6">
+    <div class="panel">
+      <h1>Recommendations</h1>
+      <ul class="thumbnails" id="recommendation_list">
+      </ul>
+    </div>
+  </div>
+</div>
