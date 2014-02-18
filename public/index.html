@@ -2,11 +2,27 @@
 <html>
   <head>
     <title>Mortar - Paint</title>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="css/base.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
   <body>
-    <h1>Paint</h1>
-    <%= @query_template %>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <div class="row">
+            <div class="span12">
+              <div class="brand">
+                <img class="logo" src="images/mortar_logo.png">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+    <div class="container">
+      <%= @query_template %>
+    </div>
 
   </body>
 </html>

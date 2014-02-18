@@ -13,16 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require "paint/mortar/local/painter"
+require "explore/mortar/local/explorer"
 require "mortar/local/controller"
 
 class Mortar::Local::Controller
-  def paint(project, data_file, port)
+  def explore(project, data_file, port)
     port ||= 3000 
-    painter = Mortar::Local::Painter.new(project.root_path)
+    explorer = Mortar::Local::Explorer.new(project.root_path)
 
     # Startup Web server
-    Server.set :title, data_file 
+    Server.set :data_directory, data_file 
     Server.set :project_root, project.root_path
     begin
       server = Thin::Server.new(Server, '0.0.0.0', port, :signals => false)

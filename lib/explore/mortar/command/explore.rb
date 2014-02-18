@@ -14,14 +14,14 @@
 # limitations under the License.
 #
 
-require "paint/mortar/local/controller"
+require "explore/mortar/local/controller"
 require "mortar/command/base"
 
 # Paint results of mortar recsys
-class Mortar::Command::Paint < Mortar::Command::Base
+class Mortar::Command::Explore < Mortar::Command::Base
 
 
-  # paint RECSYS_RESULTS 
+  # explore RECSYS_RESULTS 
   #
   # Watch a local script for changes, and illustrate data flowing through
   # while you work.
@@ -30,16 +30,16 @@ class Mortar::Command::Paint < Mortar::Command::Base
   #
   # Examples:
   #
-  #        $ mortar paint data/out/item-item 
+  #        $ mortar explore data/out/item-item 
   def index
     results_data  = shift_argument
     unless results_data 
-      error("Usage: mortar local:watch PIGSCRIPT\nMust specify PIGSCRIPT.")
+      error("Usage: mortar explore OUTPUT_DIRECTORY\nMust specify PIGSCRIPT.")
     end
     validate_arguments!
     ctrl = Mortar::Local::Controller.new
     
 
-    ctrl.paint(project, results_data, options[:port])
+    ctrl.explore(project, results_data, options[:port])
   end
 end

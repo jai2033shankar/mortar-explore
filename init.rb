@@ -15,4 +15,4 @@
 #
 
 require File.join(File.dirname(__FILE__), "bundle/bundler/setup")
-require "paint/mortar/command/paint"
+require "explore/mortar/command/explore"

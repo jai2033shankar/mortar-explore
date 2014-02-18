@@ -28,6 +28,11 @@ class Server < Sinatra::Base
   end
 
 
+  get'/api/v1/:searchString/' do
+     
+  end
+
+
 end
 
 

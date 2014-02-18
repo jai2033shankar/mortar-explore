@@ -1,5 +1,5 @@
 require "mortar/helpers"
-require "paint/mortar/local/server"
+require "explore/mortar/local/server"
 
 require 'sinatra/base'
 require 'thin'
@@ -11,10 +11,10 @@ require "logger"
 #
 
 
-class Mortar::Local::Painter
+class Mortar::Local::Explorer
     include Mortar::Local::InstallUtil
 
-    PAINTER_LOG_FILE = "paint-painter.log"
+    EXPLORER_LOG_FILE = "explore-explorer.log"
 
     # Public: Initialize the watcher utility
     #
@@ -24,7 +24,7 @@ class Mortar::Local::Painter
     def initialize(project_root_path)
         @project_root_path = project_root_path
 
-        @log ||= Logger.new("#{local_log_dir}/#{PAINTER_LOG_FILE}")
+        @log ||= Logger.new("#{local_log_dir}/#{EXPLORER_LOG_FILE}")
         @log.level = Logger::DEBUG
     end
 	
