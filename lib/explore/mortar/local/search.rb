@@ -16,12 +16,35 @@
 
 
 class Search
-  attr_accessor :base_directory
-  def initialize(base_directory)
+  attr_accessor :base_directory, :delim_char
+  def initialize(base_directory, delim_char = "\t")
     @base_directory = base_directory
+    @delim_char = delim_char 
   end
   
   def search(query)
-    Kernel.system("grep " + query + " " +  @base_directory + " -n")
+    cmd = "grep -rh " + query + " " +  @base_directory 
+    results = %x[#{cmd}]
+     
+    return parse_results(results.split("\n")) 
   end
+
+  private
+  def parse_results(input_array)
+    arr = Array.new
+    for row in input_array do
+      print row
+      row_data = row.split(delim_char).map(&:strip)
+      arr.push({
+        :fieldA => row_data[0], 
+        :fieldB => row_data[1], 
+        :weight => row_data[2], 
+        :raw_weight => row_data[3], 
+        :rank => row_data[4] 
+      }) 
+    end 
+    return arr
+  end
+  
+
 end
