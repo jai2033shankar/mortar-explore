@@ -36,10 +36,10 @@ class Mortar::Command::Explore < Mortar::Command::Base
     unless results_data 
       error("Usage: mortar explore OUTPUT_DIRECTORY\nMust specify PIGSCRIPT.")
     end
-    validate_arguments!
-    ctrl = Mortar::Local::Controller.new
+   # validate_arguments!
+   # ctrl = Mortar::Local::Controller.new
     
 
-    ctrl.explore(project, results_data, options[:port])
+    #ctrl.explore(project, results_data, options[:port])
   end
 end

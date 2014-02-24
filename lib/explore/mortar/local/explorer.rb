@@ -20,7 +20,7 @@ class Mortar::Local::Explorer
     #
     # project_root_path
     #
-    # Returns a Watcher object
+    # Returns an Explorer object
     def initialize(project_root_path)
         @project_root_path = project_root_path
 

@@ -15,11 +15,16 @@
 #
 
 require 'sinatra/base'
-require 'thin'
+require 'explore/mortar/local/search'
+#require 'thin'
 
 class Server < Sinatra::Base
 #  register Sinatra::Async
   #register Sinatra::Pollers
+  def initialize
+    @search = Mortar::Local::Search.new(settings.data_directory)
+
+  end
 
   # Load the basic page 
   get '/' do
@@ -29,7 +34,7 @@ class Server < Sinatra::Base
 
 
   get'/api/v1/:searchString/' do
-     
+
   end
 
 
