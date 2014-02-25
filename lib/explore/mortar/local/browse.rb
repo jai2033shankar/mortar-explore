@@ -36,9 +36,13 @@ class Browse
     file = directory + "/part-r-" + part_file_number
     raw_browsed = Array.new
     for i in start_index .. start_index + quantity
+      # check if end of file...
+      
+      # string is modified to match parse_results function
       raw_browsed.push( directory + ":" +i.to_s + ":" + get_line_in_file(file, i) )
     end
     @index = start_index + quantity + 1 #next time, it will start at the next index
+    print @index
     return parse_results(raw_browsed)
   end
 

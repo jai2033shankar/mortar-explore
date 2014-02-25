@@ -24,7 +24,11 @@ module Parse
     [*f][line-1]
   end
 
-  # parse results from a search query
+  # parse results from a string array 
+  #     input_array - array of strings where strings are formated as...
+  #           FILE_PATH:LINE_NUMBER:Line_DATA
+  #           *NOTE the ':' character is used to seperate the fields
+  #           this fails if a directory name has ':' in it
   def parse_results(input_array)
      results = {
       :item_item_recs => Array.new,
@@ -41,8 +45,11 @@ module Parse
     end 
     return results 
   end
-
-
+  
+  # Parses the row data and search data by pushing it to the item-item array
+  #     row_data - see macro output for detailed schema, follows the schema
+  #     search_data - metadata and each row including [ FILE_NAME, LINE_NUMBER]
+  #     arr - resulting array hash map is pushed to
   def parse_item_item(row_data, search_data, arr)
     arr.push({
       :item_A => row_data[0], 
@@ -56,6 +63,10 @@ module Parse
     }) 
   end
 
+  # Parses the row data and search data by pushing it to the user-item array
+  #     row_data - see macro output for detailed schema, follows the schema
+  #     search_data - metadata and each row including [ FILE_NAME, LINE_NUMBER]
+  #     arr - resulting array hash map is pushed to
   def parse_user_item(row_data, search_data, arr)
     arr.push({
       :user => row_data[0],

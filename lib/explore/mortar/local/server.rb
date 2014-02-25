@@ -37,6 +37,14 @@ class Server < Sinatra::Base
     end
   end
 
+  get '/api/v1/browse' do
+    browser = settings.browser 
+    params[:quantity] == nil ? quantity = 10 : quantity = params[:quantity].to_i 
+    params[:index] == nil ? index = browser.index : index = params[:index].to_i
+    params[:directory] == nil ? directory = "item_item_recs" : directory = params[:directory] 
+    body { browser.browse(quantity, index, directory) }
+  end 
+
 
 end
 

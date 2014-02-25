@@ -19,6 +19,9 @@ To start exploring your results:
 $ mortar watch RESULTS_DIRECTORY
 ```
 
+The RESULTS_DIRECTORY should be where the pigscript stores all the recsys results.  Should reference the out directory as mortar explore is meant to look into both the item_item_recs and user_item_recs
+
+It is also best to store the item-item recs in a directory as item_item_recs and the user-item recs in a directory as user_item_recs.  This follows the examples given in mortar-recsys project
 
 ### Development ###
 

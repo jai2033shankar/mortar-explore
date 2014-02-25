@@ -27,7 +27,7 @@ class Mortar::Local::Controller
     Server.set :data_directory, data_directory 
     Server.set :project_root, project.root_path
     Server.set :searcher, Search.new(data_directory)
-    #Server.set :browser, Browse.new(data_directory)
+    Server.set :browser, Browse.new(data_directory)
     begin
       server = Thin::Server.new(Server, '0.0.0.0', port, :signals => false)
     rescue => e
