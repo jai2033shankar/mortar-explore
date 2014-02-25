@@ -21,6 +21,7 @@ class Server < Sinatra::Base
   # Load the basic page 
   get '/' do
     @query_template = File.read(settings.resource_locations["query"]).to_s
+    @browse_template = File.read(settings.resource_locations["browse"]).to_s
     erb File.read(settings.resource_locations["index"]).to_s
   end
 
@@ -39,10 +40,11 @@ class Server < Sinatra::Base
 
   get '/api/v1/browse' do
     browser = settings.browser 
+    print params
     params[:quantity] == nil ? quantity = 10 : quantity = params[:quantity].to_i 
     params[:index] == nil ? index = browser.index : index = params[:index].to_i
-    params[:directory] == nil ? directory = "item_item_recs" : directory = params[:directory] 
-    body { browser.browse(quantity, index, directory) }
+    params[:directory] == nil or params[:directory] == "" ? directory = "item_item_recs" : directory = params[:directory] 
+    body { browser.browse(quantity, index, directory).to_json }
   end 
 
 
@@ -55,5 +57,6 @@ public_folder_str = "../../../../../public"
 Server.set :public_folder, File.expand_path( public_folder_str,__FILE__)
 Server.set(:resource_locations, {
   "index" => File.expand_path(public_folder_str + "/index.html", __FILE__),
-  "query" => File.expand_path(public_folder_str + "/templates/query.html", __FILE__)
+  "query" => File.expand_path(public_folder_str + "/templates/query.html", __FILE__),
+  "browse" => File.expand_path(public_folder_str + "/templates/browse.html", __FILE__)
 })

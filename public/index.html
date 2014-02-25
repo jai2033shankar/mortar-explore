@@ -13,17 +13,25 @@
         <div class="container">
           <div class="row">
             <div class="span12">
-              <div class="brand">
-                <img class="logo" src="images/mortar_logo.png">
-              </div>
+              <a class="brand" href="/"><img class="logo" src="images/mortar_logo.png"></a>
+              <ul class="nav pull-left" id="explore_nav" >
+                <li id="browse_item"><a href="#browse">Browse</a></li>
+                <li id="search_item"><a href="#search">Search</a></li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
     </div> 
-    <div class="container">
-      <%= @query_template %>
+    <div class="container" id="explore_container">
+      <div class="explore_content" id="browse_content">
+        <%= @browse_template %>
+      </div>
+      <div class="explore_content" id="search_content">
+        <p>Search</p>
+      </div>
     </div>
   </body>
+  <script src="bin/explore.js"></script>
   <script src="bin/browse.js"></script>
 </html>
