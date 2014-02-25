@@ -23,13 +23,23 @@ class Browse
   def initialize(base_directory, delim_char = "\t")
     @base_directory = base_directory
     @delim_char = delim_char 
-    @index = 0
+    @index = 1
   end
   
-  def browse(start_index, quantity, ii_recs, directory = @base_directory)
-      
+  # gets a quantity amount of  certain lines from an index   
+  #    quantity - how many lines of data will be returned
+  #    start_index - what line of the file browse should start from
+  #    directory - where the part file is located
+  def browse(quantity, start_index = @index, directory = nil)
+    part_file_number = "00000" 
+    directory == nil ? directory = @base_directory:  directory = @base_directory + "/" + directory
+    file = directory + "/part-r-" + part_file_number
+    raw_browsed = Array.new
+    for i in start_index .. start_index + quantity
+      raw_browsed.push( directory + ":" +i.to_s + ":" + get_line_in_file(file, i) )
+    end
+    @index = start_index + quantity + 1 #next time, it will start at the next index
+    return parse_results(raw_browsed)
   end
-
-  
 
 end

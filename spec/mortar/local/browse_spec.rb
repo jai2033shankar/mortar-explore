@@ -17,12 +17,23 @@ describe Browse do
   end
 
   describe "browsing" do
-    index = 0 
+    index = 1 
     quantity = 5
     recommendations = 'item_item_recs'
-    query_results = [{:raw_weight=>"5.65644", :rank=>"5", :weight=>"2.7485006", :fieldA=>"alien", :fieldB=>"scream"}] 
+    browse_results = {
+       :item_item_recs => [
+         {:type=>"item_item", :raw_weight=>"3.5342972", :item_A=>"big", :weight=>"6.208612", :file=>"spec/fake/item_item_recs", :rank=>"1", :item_B=>"the wizard of oz", :line=>"1"}, 
+         {:type=>"item_item", :raw_weight=>"3.970611", :item_A=>"big", :weight=>"6.0058064", :file=>"spec/fake/item_item_recs", :rank=>"2", :item_B=>"peter pan", :line=>"2"}, 
+         {:type=>"item_item", :raw_weight=>"3.833774", :item_A=>"big", :weight=>"5.896059", :file=>"spec/fake/item_item_recs", :rank=>"3", :item_B=>"snow white", :line=>"3"}, 
+         {:type=>"item_item", :raw_weight=>"4.8948455", :item_A=>"big", :weight=>"5.5231767", :file=>"spec/fake/item_item_recs", :rank=>"4", :item_B=>"toy story", :line=>"4"}, 
+         {:type=>"item_item", :raw_weight=>"5.81908", :item_A=>"big", :weight=>"4.407944", :file=>"spec/fake/item_item_recs", :rank=>"5", :item_B=>"mary poppins", :line=>"5"}, 
+         {:type=>"item_item", :raw_weight=>"8.266502", :item_A=>"antz", :weight=>"3.9243095", :file=>"spec/fake/item_item_recs", :rank=>"1", :item_B=>"the lion king", :line=>"6"}
+      ],
+       :user_item_recs => [] 
+    }
     it "returns 5 rows from 0" do
-      #browse.browse(recommendations, index, quantity).should eq(query_results)
+      browse.browse( quantity, index,recommendations).should eq(browse_results)
+      browse.index.should eq(7)
     end
   end
 
