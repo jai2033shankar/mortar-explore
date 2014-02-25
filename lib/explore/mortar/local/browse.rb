@@ -15,19 +15,19 @@
 #
 require 'explore/mortar/local/parse' 
 
-class Search
+class Browse
   include Parse
-  attr_accessor :base_directory, :delim_char
+
+  attr_accessor :base_directory, :delim_char, :index
+
   def initialize(base_directory, delim_char = "\t")
     @base_directory = base_directory
     @delim_char = delim_char 
+    @index = 0
   end
   
-  def search(query)
-    cmd = "grep -rn " + query + " " +  @base_directory 
-    results = %x[#{cmd}]
-     
-    return parse_results(results.split("\n")) 
+  def browse(start_index, quantity, ii_recs, directory = @base_directory)
+      
   end
 
   

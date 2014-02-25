@@ -15,6 +15,7 @@
 #
 require "explore/mortar/local/explorer"
 require 'explore/mortar/local/search'
+require 'explore/mortar/local/browse'
 require "mortar/local/controller"
 
 class Mortar::Local::Controller
@@ -26,14 +27,15 @@ class Mortar::Local::Controller
     Server.set :data_directory, data_directory 
     Server.set :project_root, project.root_path
     Server.set :searcher, Search.new(data_directory)
+    #Server.set :browser, Browse.new(data_directory)
     begin
       server = Thin::Server.new(Server, '0.0.0.0', port, :signals => false)
     rescue => e
       print 'error'
     end
 
-    server.start
     launch_browser(port)
+    server.start
 
   end
 
@@ -44,34 +46,13 @@ class Mortar::Local::Controller
   #
   # Returns nothing
   def launch_browser(port) 
+    print 'opening browser...'
     begin
       require "launchy"
       Launchy.open("http://localhost:#{port}")
     rescue => msg
       warning "Unable to automatically launch browser. Please visit http://localhost:#{port}"
     end
-  end
-
-  def styled_error(error, message='Watchtower internal error.')
-    $stderr.puts(" !    #{message}.")
-    $stderr.puts(" !    Report a bug at: https://github.com/mortardata/watchtower/issues/new")
-    $stderr.puts
-    $stderr.puts("    Error:       #{error.message} (#{error.class})")
-    $stderr.puts("    Backtrace:   #{error.backtrace.first}")
-    error.backtrace[1..-1].each do |line|
-      $stderr.puts("                 #{line}")
-    end
-    if error.backtrace.length > 1
-      $stderr.puts
-    end
-    command = ARGV.map do |arg|
-      if arg.include?(' ')
-        arg = %{"#{arg}"}
-      else
-        arg
-      end
-    end.join(' ')
-    $stderr.puts
   end
 
 
