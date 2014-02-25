@@ -16,12 +16,8 @@
 
 require 'sinatra/base'
 require 'explore/mortar/local/search'
-#require 'thin'
 
 class Server < Sinatra::Base
-#  register Sinatra::Async
-  #register Sinatra::Pollers
-
   # Load the basic page 
   get '/' do
     @query_template = File.read(settings.resource_locations["query"]).to_s
@@ -32,8 +28,8 @@ class Server < Sinatra::Base
   # Requires 'query' param
   # api/vq1/search?query='SEARCH_STRING'
   get'/api/v1/search' do
-    searcher = Search.new(settings.data_directory)
     query = params[:query] 
+    searcher = settings.searcher 
     if query != nil 
       body{ searcher.search(query) }
     else
@@ -53,4 +49,3 @@ Server.set(:resource_locations, {
   "index" => File.expand_path(public_folder_str + "/index.html", __FILE__),
   "query" => File.expand_path(public_folder_str + "/templates/query.html", __FILE__)
 })
-

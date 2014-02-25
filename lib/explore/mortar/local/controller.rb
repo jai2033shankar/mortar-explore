@@ -14,16 +14,18 @@
 # limitations under the License.
 #
 require "explore/mortar/local/explorer"
+require 'explore/mortar/local/search'
 require "mortar/local/controller"
 
 class Mortar::Local::Controller
-  def explore(project, data_file, port)
+  def explore(project, data_directory, port)
     port ||= 3000 
     explorer = Mortar::Local::Explorer.new(project.root_path)
 
     # Startup Web server
-    Server.set :data_directory, data_file 
+    Server.set :data_directory, data_directory 
     Server.set :project_root, project.root_path
+    Server.set :searcher, Search.new(data_directory)
     begin
       server = Thin::Server.new(Server, '0.0.0.0', port, :signals => false)
     rescue => e

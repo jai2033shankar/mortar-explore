@@ -13,23 +13,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require 'explore/mortar/local/parse' 
 
-class Search
-  include Parse
-  attr_accessor :base_directory, :delim_char
-  def initialize(base_directory, delim_char = "\t")
-    @base_directory = base_directory
-    @delim_char = delim_char 
-  end
-  
-  def search(query)
-    cmd = "grep -rh " + query + " " +  @base_directory 
-    results = %x[#{cmd}]
-     
-    return parse_results(results.split("\n")) 
-  end
+module Parse
 
+  def parse_results(input_array)
+    arr = Array.new
+    for row in input_array do
+      print row
+      row_data = row.split(delim_char).map(&:strip)
+      arr.push({
+        :fieldA => row_data[0], 
+        :fieldB => row_data[1], 
+        :weight => row_data[2], 
+        :raw_weight => row_data[3], 
+        :rank => row_data[4] 
+      }) 
+    end 
+    return arr
+  end
   
 
 end
+  
