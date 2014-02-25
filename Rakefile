@@ -36,6 +36,7 @@ task :watch => [:verify, :install] do
     end
     Rake::Task["install"].execute
     Rake::Task["lessc"].execute
+    Rake::Task["compile_js"].execute
     print "Watching #{PLUGIN_NAME} for changes... "
     STDOUT.flush
   end
@@ -58,6 +59,7 @@ ERROR
   end
 end
 
+
 desc "Install plugin"
 task :install do
   action "Installing plugin" do
@@ -66,6 +68,24 @@ task :install do
   end
 end
 
+
+
+desc "Compile javascript"
+task :compile_js do
+  action "Compiling javascript..." do
+    FileUtils.rm_rf(Dir.glob("public/bin/*")) 
+    Dir["public/js/*"].each do |directory|
+      out = ""
+      Dir[directory+"/*"].each do |file|
+        out += File.read(file)
+      end  
+      base =  directory.split('/') 
+      File.open("public/bin/" + base[base.length-1] + ".js", "a") { |file|
+        file.write(out)
+      }
+    end
+  end
+end
 
 desc "Uninstall the #{PLUGIN_NAME} plugin"
 task :clean do
