@@ -21,10 +21,6 @@ require 'explore/mortar/local/search'
 class Server < Sinatra::Base
 #  register Sinatra::Async
   #register Sinatra::Pollers
-  def initialize
-    @search = Mortar::Local::Search.new(settings.data_directory)
-
-  end
 
   # Load the basic page 
   get '/' do
@@ -32,9 +28,17 @@ class Server < Sinatra::Base
     erb File.read(settings.resource_locations["index"]).to_s
   end
 
-
-  get'/api/v1/:searchString/' do
-
+  # Api call to search for string
+  # Requires 'query' param
+  # api/vq1/search?query='SEARCH_STRING'
+  get'/api/v1/search' do
+    searcher = Search.new(settings.data_directory)
+    query = params[:query] 
+    if query != nil 
+      body{ searcher.search(query) }
+    else
+      body {}
+    end
   end
 
 
