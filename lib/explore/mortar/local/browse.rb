@@ -50,8 +50,6 @@ class Browse
     result = %x[#{cmd}]
     i = start_index 
     for row in result.split("\n") do
-      print 'row'
-      print row
       raw_browsed.push( directory + ":" + i.to_s + ":" + row ) 
       i = i + 1 
     end

@@ -3,8 +3,8 @@
   /*  Controller Functions */
   function init_browse(){
 
-    $('#browse_next_page').on('click', fire_next_page);
-    $('#browse_previous_page').on('click', fire_previous_page);
+    $('.browse_next_page').on('click', fire_next_page);
+    $('.browse_previous_page').on('click', fire_previous_page);
     get_browse();
   }
 
@@ -43,9 +43,9 @@
           );
     console.log(current_index);
     if(current_index > (get_browse_by() + 1))
-      $('#browse_previous_page').removeAttr('disabled');
+      $('.browse_previous_page').removeAttr('disabled');
     else
-      $('#browse_previous_page').attr('disabled', 'disabled');
+      $('.browse_previous_page').attr('disabled', 'disabled');
       
       
       
