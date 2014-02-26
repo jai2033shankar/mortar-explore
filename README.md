@@ -44,3 +44,4 @@ $ rake clean
 
 ### Known Issues ###
 
+* Current file reading of browsing is very slow. should find way to make it better

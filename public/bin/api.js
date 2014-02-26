@@ -3,7 +3,7 @@ $.mortar_data.api = $.mortar_data.api || {};
 
 $.mortar_data.api.get_browse = function(quantity, index, directory, success_callback, error_callback){
   var params = {
-    quantity  : quantity,
+    quantity  : quantity,  
     index     : index,
     directory : directory
   }

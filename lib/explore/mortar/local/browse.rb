@@ -24,26 +24,41 @@ class Browse
     @base_directory = base_directory
     @delim_char = delim_char 
     @index = 1
+    @file = nil
   end
+
+
   
   # gets a quantity amount of  certain lines from an index   
   #    quantity - how many lines of data will be returned
   #    start_index - what line of the file browse should start from
   #    directory - where the part file is located
   def browse(quantity, start_index = @index, directory = nil)
-    part_file_number = "00000" 
-    directory == nil ? directory = @base_directory:  directory = @base_directory + "/" + directory
-    file = directory + "/part-r-" + part_file_number
-    raw_browsed = Array.new
-    for i in start_index .. start_index + quantity - 1
-      # check if end of file...
-      
-      # string is modified to match parse_results function
-      raw_browsed.push( directory + ":" +i.to_s + ":" + get_line_in_file(file, i) )
-    end
+    raw_browsed = browse_from_directory(quantity, start_index, directory) 
     @index = start_index + quantity #next time, it will start at the next index
     print @index
     return parse_results(raw_browsed)
   end
+
+
+  def browse_from_directory(quantity, start_index, directory)
+    part_file_number = "00000" 
+    directory == nil ? directory = @base_directory:  directory = @base_directory + "/" + directory
+    file = directory + "/part-r-" + part_file_number
+    raw_browsed = Array.new
+    cmd = "sed -n '#{start_index},#{start_index+quantity-1}p' #{file}" 
+    result = %x[#{cmd}]
+    i = start_index 
+    for row in result.split("\n") do
+      print 'row'
+      print row
+      raw_browsed.push( directory + ":" + i.to_s + ":" + row ) 
+      i = i + 1 
+    end
+    
+    return raw_browsed
+  end
+
+  
 
 end

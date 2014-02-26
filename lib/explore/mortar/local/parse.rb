@@ -20,8 +20,10 @@ module Parse
 
   # returns a specific line in a file
   def get_line_in_file(file, line)
-    f = File.open(file)
-    [*f][line-1]
+    #f = File.open(file)
+    #[*f][line-1]
+    cmd = "sed -n '#{line}p' #{file}"
+    result = %x[#{cmd}]
   end
 
   # parse results from a string array 
@@ -52,12 +54,12 @@ module Parse
   #     arr - resulting array hash map is pushed to
   def parse_item_item(row_data, search_data, arr)
     arr.push({
+      :line => search_data[1],
       :item_A => row_data[0], 
       :item_B => row_data[1], 
       :weight => row_data[2], 
       :raw_weight => row_data[3], 
       :rank => row_data[4], 
-      :line => search_data[1],
       :file => search_data[0],
       :type => "item_item"
     }) 
@@ -69,6 +71,7 @@ module Parse
   #     arr - resulting array hash map is pushed to
   def parse_user_item(row_data, search_data, arr)
     arr.push({
+      :line => search_data[1],
       :user => row_data[0],
       :item => row_data[1],
       :weight => row_data[2],
@@ -76,7 +79,6 @@ module Parse
       :user_reason_item_weight => row_data[4],  
       :item_reason_item_weight => row_data[5],  
       :rank => row_data[6],  
-      :line => search_data[1],
       :file => search_data[0],
       :type => "user_item"
     })
