@@ -11,8 +11,7 @@ $.mortar_data.widgets = $.mortar_data.widgets || {};
 $.mortar_data.widgets.draw_table = function(table_header, table_body, array){
   var key_array = [];
   if(array.length > 0){
-    $(table_header).empty();
-    $(table_body).empty();
+    $.mortar_data.widgets.erase_table(table_header, table_body);
 
     $(table_header).append('<tr></tr>');
     for(key in array[0]){
@@ -31,4 +30,10 @@ $.mortar_data.widgets.draw_table = function(table_header, table_body, array){
   }
 
 
-}
+};
+
+
+$.mortar_data.widgets.erase_table = function(table_header, table_body){
+  $(table_header).empty();
+  $(table_body).empty();
+};

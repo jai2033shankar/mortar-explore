@@ -43,7 +43,7 @@ class Server < Sinatra::Base
     print params
     params[:quantity] == nil ? quantity = 10 : quantity = params[:quantity].to_i 
     params[:index] == nil ? index = browser.index : index = params[:index].to_i
-    params[:directory] == nil or params[:directory] == "" ? directory = "item_item_recs" : directory = params[:directory] 
+    params[:directory] == nil or params[:directory] == "" ? directory = "" : directory = params[:directory] 
     body { browser.browse(quantity, index, directory).to_json }
   end 
 

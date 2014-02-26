@@ -31,10 +31,11 @@ module Parse
   #           FILE_PATH:LINE_NUMBER:Line_DATA
   #           *NOTE the ':' character is used to seperate the fields
   #           this fails if a directory name has ':' in it
-  def parse_results(input_array)
+  def parse_results(input_array, error= nil)
      results = {
       :item_item_recs => Array.new,
-      :user_item_recs => Array.new
+      :user_item_recs => Array.new,
+      :error => error 
     }
     for row in input_array do
       search_data = row.split(':', 3)
@@ -55,13 +56,13 @@ module Parse
   def parse_item_item(row_data, search_data, arr)
     arr.push({
       :line => search_data[1],
+      :file => search_data[0],
+      :type => "item_item",
       :item_A => row_data[0], 
       :item_B => row_data[1], 
       :weight => row_data[2], 
       :raw_weight => row_data[3], 
-      :rank => row_data[4], 
-      :file => search_data[0],
-      :type => "item_item"
+      :rank => row_data[4]
     }) 
   end
 
@@ -72,15 +73,15 @@ module Parse
   def parse_user_item(row_data, search_data, arr)
     arr.push({
       :line => search_data[1],
+      :file => search_data[0],
+      :type => "user_item",
       :user => row_data[0],
       :item => row_data[1],
       :weight => row_data[2],
       :reason_item => row_data[3],  
       :user_reason_item_weight => row_data[4],  
       :item_reason_item_weight => row_data[5],  
-      :rank => row_data[6],  
-      :file => search_data[0],
-      :type => "user_item"
+      :rank => row_data[6]  
     })
   end
 

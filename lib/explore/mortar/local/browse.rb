@@ -24,7 +24,6 @@ class Browse
     @base_directory = base_directory
     @delim_char = delim_char 
     @index = 1
-    @file = nil
   end
 
 
@@ -33,30 +32,56 @@ class Browse
   #    quantity - how many lines of data will be returned
   #    start_index - what line of the file browse should start from
   #    directory - where the part file is located
-  def browse(quantity, start_index = @index, directory = nil)
-    raw_browsed = browse_from_directory(quantity, start_index, directory) 
-    @index = start_index + quantity #next time, it will start at the next index
-    print @index
-    return parse_results(raw_browsed)
+  def browse(quantity, start_index = @index, directory_or_file = nil)
+    raw_browsed, error = browse_from_directory(quantity, start_index, directory_or_file) 
+    @index = start_index + raw_browsed.length #next time, it will start at the next index
+    return parse_results(raw_browsed, error)
   end
 
 
-  def browse_from_directory(quantity, start_index, directory)
-    part_file_number = "00000" 
-    directory == nil ? directory = @base_directory:  directory = @base_directory + "/" + directory
-    file = directory + "/part-r-" + part_file_number
-    raw_browsed = Array.new
-    cmd = "sed -n '#{start_index},#{start_index+quantity-1}p' #{file}" 
-    result = %x[#{cmd}]
-    i = start_index 
-    for row in result.split("\n") do
-      raw_browsed.push( directory + ":" + i.to_s + ":" + row ) 
-      i = i + 1 
-    end
+  def browse_from_directory(quantity, start_index, directory_or_file)
+    directory_or_file == nil ? directory_or_file = @base_directory_or_file:  directory_or_file = @base_directory + "/" + directory_or_file
+
+      
+    file = find_file (directory_or_file)
     
-    return raw_browsed
+      
+    if file != nil 
+      raw_browsed = Array.new
+      cmd = "sed -n '#{start_index},#{start_index+quantity-1}p' #{file}" 
+      result = %x[#{cmd}]
+      i = start_index 
+      for row in result.split("\n") do
+        raw_browsed.push( file + ":" + i.to_s + ":" + row ) 
+        i = i + 1 
+      end
+      
+      return raw_browsed, nil
+    else
+      return Array.new, "The requested directory or file, #{directory_or_file}, does not exist.  Please specify again." 
+    end
   end
 
+  def find_file(directory_or_file)
+    file = nil
+    if File.directory?(directory_or_file)
+      all_contents = Dir.entries(directory_or_file)
+      contents = Array.new
+      for item in all_contents do
+        if File.exists?(directory_or_file +"/" +  item)
+          # TODO -- sort and use real file names
+          if (item == "part-r-00000")
+            contents.push(item)
+          end
+        end
+      end
+      file = directory_or_file + "/" + contents[0]
+      
+    elsif File.exists?(directory_or_file)
+      file = directory_or_file 
+    end
+    return file
+  end
   
 
 end
