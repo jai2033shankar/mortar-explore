@@ -24,13 +24,17 @@ class Search
   end
   
   def search(query)
-    cmd = "grep -rn " + query + " " +  @base_directory 
+    cmd = "grep -rn '" + query + "' " +  @base_directory 
     results = %x[#{cmd}]
     error = nil
+
     if (results == nil or results == "")
       error = "Search string found nothing.  Please specify again"
+      results = []
+    else
+      results = results.split("\n")
     end
-    return parse_results(results.split("\n"), error) 
+    return parse_results(results, error) 
   end
 
   

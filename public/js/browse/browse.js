@@ -4,6 +4,7 @@
   function init_browse(){
     $('.browse_next_page').on('click', fire_next_page);
     $('.browse_previous_page').on('click', fire_previous_page);
+    
     get_browse();
   }
 

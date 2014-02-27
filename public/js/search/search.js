@@ -45,7 +45,12 @@
 
   function fire_search(){
     var search_field = $('#search_query').val();
-    $.mortar_data.api.get_search(search_field, load_search, search_error);
+    if (search_field != ''){
+      $.mortar_data.api.get_search(search_field, load_search, search_error);
+    }else{
+      fire_search_error('No search query was given.  Please specify'); 
+    }
+    
   }
 
   $(document).ready(function(){

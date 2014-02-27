@@ -38,12 +38,15 @@ module Parse
       :error => error 
     }
     for row in input_array do
-      search_data = row.split(':', 3)
-      row_data = search_data[2].split(delim_char).map(&:strip)
-      if row_data.length == II_COUNT  
-        parse_item_item(row_data, search_data, results[:item_item_recs])
-      elsif row_data.length == UI_COUNT
-        parse_user_item(row_data, search_data, results[:user_item_recs])
+      begin
+        search_data = row.split(':', 3)
+        row_data = search_data[2].split(delim_char).map(&:strip)
+        if row_data.length == II_COUNT  
+          parse_item_item(row_data, search_data, results[:item_item_recs])
+        elsif row_data.length == UI_COUNT
+          parse_user_item(row_data, search_data, results[:user_item_recs])
+        end
+      rescue
       end
     end 
     return results 

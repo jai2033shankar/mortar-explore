@@ -4,6 +4,7 @@
     window.onhashchange = function(e) {
       on_hash_change();
     };
+    window.location.hash = '#browse';
     on_hash_change();
   };
 
