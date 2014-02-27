@@ -24,7 +24,7 @@
   }
 
 
-  /*
+  /**
    * data - expect to be an object where each key leads to an array
    */
   function fire_reload_table(data){
