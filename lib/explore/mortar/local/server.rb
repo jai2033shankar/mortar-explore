@@ -20,7 +20,7 @@ require 'explore/mortar/local/search'
 class Server < Sinatra::Base
   # Load the basic page 
   get '/' do
-    @query_template = File.read(settings.resource_locations["query"]).to_s
+    @search_template = File.read(settings.resource_locations["search"]).to_s
     @browse_template = File.read(settings.resource_locations["browse"]).to_s
     erb File.read(settings.resource_locations["index"]).to_s
   end
@@ -31,6 +31,7 @@ class Server < Sinatra::Base
   get'/api/v1/search' do
     query = params[:query] 
     searcher = settings.searcher 
+    print 'search'
     if query != nil 
       body{ searcher.search(query) }
     else
@@ -57,6 +58,6 @@ public_folder_str = "../../../../../public"
 Server.set :public_folder, File.expand_path( public_folder_str,__FILE__)
 Server.set(:resource_locations, {
   "index" => File.expand_path(public_folder_str + "/index.html", __FILE__),
-  "query" => File.expand_path(public_folder_str + "/templates/query.html", __FILE__),
+  "search" => File.expand_path(public_folder_str + "/templates/search.html", __FILE__),
   "browse" => File.expand_path(public_folder_str + "/templates/browse.html", __FILE__)
 })
