@@ -31,15 +31,18 @@ class Server < Sinatra::Base
   get'/api/v1/search' do
     query = params[:query] 
     searcher = settings.searcher 
-    print 'search'
-    if query != nil 
-      body{ searcher.search(query) }
+    print '\nsearching...'
+    print params
+    if query != nil and query != "" 
+      body{ searcher.search(query).to_json }
     else
-      body {}
+      print 'return no search error'
+      body {{:error => 'No search query was given.  Please specify'}.to_json}
     end
   end
 
   get '/api/v1/browse' do
+    print '\nbrowsing...'
     browser = settings.browser 
     print params
     params[:quantity] == nil ? quantity = 10 : quantity = params[:quantity].to_i 

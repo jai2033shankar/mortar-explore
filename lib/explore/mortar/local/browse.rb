@@ -40,12 +40,8 @@ class Browse
 
 
   def browse_from_directory(quantity, start_index, directory_or_file)
-    directory_or_file == nil ? directory_or_file = @base_directory_or_file:  directory_or_file = @base_directory + "/" + directory_or_file
-
-      
+    directory_or_file == nil ? directory_or_file = @base_directory:  directory_or_file = @base_directory + "/" + directory_or_file
     file = find_file (directory_or_file)
-    
-      
     if file != nil 
       raw_browsed = Array.new
       cmd = "sed -n '#{start_index},#{start_index+quantity-1}p' #{file}" 
@@ -55,7 +51,6 @@ class Browse
         raw_browsed.push( file + ":" + i.to_s + ":" + row ) 
         i = i + 1 
       end
-      
       return raw_browsed, nil
     else
       return Array.new, "The requested directory or file, #{directory_or_file}, does not exist.  Please specify again." 

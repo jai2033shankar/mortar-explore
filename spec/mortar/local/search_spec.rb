@@ -40,4 +40,16 @@ describe Search do
     end
   end
 
+  describe "search returns nothing found error" do
+    query_results = {
+      :item_item_recs => [],
+      :user_item_recs => [],
+      :error => 'Search string found nothing.  Please specify again'
+    }
+    it "gives error" do
+      search.search('foo').should eq(query_results)
+    end
+
+  end
+
 end
