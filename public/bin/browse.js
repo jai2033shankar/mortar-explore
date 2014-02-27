@@ -1,7 +1,9 @@
 (function(){
   var current_index = 1;
+  var browse_table;
   /*  Controller Functions */
   function init_browse(){
+    browse_table = new MortarTable('#browse_table',[], {});
     $('.browse_next_page').on('click', fire_next_page);
     $('.browse_previous_page').on('click', fire_previous_page);
     
@@ -46,11 +48,8 @@
         }
       }
       current_index += largest_array.length; //update current index
-      $.mortar_data.widgets.draw_table(
-                '#browse_table_header', 
-                '#browse_table_body', 
-                largest_array
-            );
+      browse_table.array = largest_array;
+      browse_table.draw();
     } else{
       fire_browse_error(data_parsed.error);
     }
