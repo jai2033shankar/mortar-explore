@@ -48,7 +48,7 @@
         }
       }
       current_index += largest_array.length; //update current index
-      browse_table.array = largest_array;
+      browse_table.set_array(largest_array);
       browse_table.draw();
     } else{
       fire_browse_error(data_parsed.error);
