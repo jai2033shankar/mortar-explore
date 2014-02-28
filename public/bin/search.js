@@ -11,6 +11,7 @@
     $('#search_results').empty();
     search_tables = [];
     if(data_parsed.error == null){
+      $('#search_error_row').addClass('hidden');
       for (key in data_parsed){
         var item = data_parsed[key];
         if(item instanceof Array){
@@ -20,7 +21,9 @@
             search_tables.push( new MortarTable(
                     '#' + container_id,
                     item,
-                    {}
+                    {
+                      page_limit : 50
+                    }
                   ));
           }
         }
@@ -45,11 +48,18 @@
      
   };
 
+  function show_progress(){
+     
+  };
+
   function fire_search(){
-    var search_field = $('#search_query').val();
+    var search_field = $('#search_query').val().trim();
+    $('#search_text').text('Search results for "' + search_field + '"');
     if (search_field != ''){
       $.mortar_data.api.get_search(search_field, load_search, search_error);
     }else{
+
+      $('#search_results').empty();
       fire_search_error('No search query was given.  Please specify'); 
     }
     

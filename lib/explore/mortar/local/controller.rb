@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 require "explore/mortar/local/explorer"
-require 'explore/mortar/local/search'
-require 'explore/mortar/local/browse'
+require 'explore/mortar/scraper/search'
+require 'explore/mortar/scraper/browse'
 require "mortar/local/controller"
 
 class Mortar::Local::Controller

@@ -1,4 +1,4 @@
-require "explore/mortar/local/search"
+require "explore/mortar/scraper/search"
 
 
 describe Search do

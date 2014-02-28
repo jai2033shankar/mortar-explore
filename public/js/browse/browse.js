@@ -4,10 +4,11 @@
   /*  Controller Functions */
   function init_browse(){
     browse_table = new MortarTable('#browse_table',[], {
-      fire_next_page : fire_next_page,
-      fire_previous_page : fire_previous_page
+      page_limit: get_browse_by(),
+      next_callback : fire_next_page,
+      previous_callback : fire_previous_page
     });
-    
+    $('#browse_update').click(fire_browse_update);  
     get_browse();
   }
 
@@ -15,7 +16,6 @@
    * Makes api call to /api/v1/browse
    */
   function get_browse(){
-    debugger;
     $.mortar_data.api.get_browse(
       get_browse_by(), //quantity 
       current_index, //index to start browse
@@ -34,6 +34,10 @@
   function fire_reload_table(data){
     
     var data_parsed = JSON.parse(data);
+    if (data_parsed.location == ""){
+      data_parsed.location = './'; 
+    }
+    $('#browse_location').text(data_parsed.location);
     // server returned no error
     if(data_parsed.error == null){
       $('#browse_error_row').addClass('hidden');
@@ -50,8 +54,11 @@
         }
       }
       current_index += largest_array.length; //update current index
-      browse_table.set_array(largest_array);
-      browse_table.draw();
+      if(largest_array.length > 0){
+        browse_table.set_array(largest_array);
+        browse_table.draw();
+      }
+     
     } else{
       fire_browse_error(data_parsed.error);
     }
@@ -67,17 +74,22 @@
    * Event when next content is clicked
    */
   function fire_next_page(){
-    get_browse(); 
+    get_browse();
   };
   
   /*
    * Event when back content is clicked
    */
   function fire_previous_page(){
-    if(current_index - (get_browse_by()*2) > 0){
-      current_index -= (get_browse_by()*2);
+    if(current_index - (get_browse_by() + browse_table.row_count) > 0){
+      current_index -= (get_browse_by() + browse_table.row_count);
       get_browse(); 
     }
+  };
+
+  function fire_browse_update(){
+    current_index = 1;
+    get_browse();
   };
 
   /*

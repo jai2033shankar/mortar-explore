@@ -1,6 +1,3 @@
-$.mortar_data = $.mortar_data || {};
-$.mortar_data.widgets = $.mortar_data.widgets || {};
-
 /*
  * Initialize with
  * var mortarTable = new MortarTable(
@@ -17,6 +14,7 @@ function MortarTable(table_container_id, array, options){
   this.set_array(array);
   this.table_container_id = table_container_id;
   var now = new Date().getTime();
+  now = now.toString() + Math.floor(Math.random()*1000).toString();
   this.table_id = 'table_' + now;
   this.table_header_id = 'table_' + now + '_header';
   this.table_body_id = 'table_' + now + '_body';
@@ -27,38 +25,31 @@ function MortarTable(table_container_id, array, options){
   this.table_class = options.table_class || 'table table-bordered table-condensed table-striped';
   this.page_limit = options.page_limit || 10;
   this.index = 0;
-  console.log(options);
-  this.fire_next_page_finish = options.fire_next_page || null;
-  this.fire_previous_page_finish = options.fire_previous_page || null;
+  this.fire_next_page_finish = options.next_callback || null;
+  this.fire_previous_page_finish = options.previous_callback || null;
 
   return this;
 };
-
-MortarTable.prototype.erase = function(){
-  $(this.table_container_id).empty();
-};
-
-MortarTable.prototype.erase_rows = function(){
-  $('#'+this.table_body_id).empty();
-};
-
-
-MortarTable.prototype.draw_body_content = function(){
-  var key_array = this.key_array;
-  var row_count = 0;
-  for(var i  = this.index; i < this.array.length && row_count < this.page_limit; i++, row_count++){
-    
-    var row = this.array[i];
-    var $table_row = $('#' + this.table_body_id).append('<tr></tr>'); 
-    for( var j = 0; j < key_array.length; j++){
-      $table_row.append('<td>' + row[key_array[j] ] + '</td>');
+/*
+ * For resetting array
+ */
+MortarTable.prototype.set_array = function(array){
+  this.array = array;
+  this.index = 0;
+  this.key_array = [];
+  if(this.array.length > 0){
+    var k = this.keys(this.array[0]);
+    for(var i = 0; i < k.length; i++){
+      var key_item = k[i];
+      this.key_array.push(key_item);
     }
   }
-  this.index += row_count;
-};
+}
 
+/*
+ * Main function to handle drawing.  Should really only need to call this
+ */
 MortarTable.prototype.draw = function(){
-  
   var array = this.array;
   var table_header = this.table_header_id;
   var table_body = this.table_body_id;
@@ -85,6 +76,8 @@ MortarTable.prototype.draw = function(){
         '</div>'
     );
     var that = this;
+
+    /* Event handler for next page click */
     $('.'+this.next_page_class).click(function(){ /* Hack because we lose reference to this */
       if (that.index >= that.array.length){
         if(that.fire_next_page_finish) that.fire_next_page_finish();  
@@ -94,24 +87,60 @@ MortarTable.prototype.draw = function(){
       }
    
     });
+    /* Event handler for back page click */
     $('.'+this.previous_page_class).click(function(){
-      if(that.index == 0 || that.index-(that.page_limit*2) < 0 ){
+      debugger;
+      if(that.index == 0 || that.index-(that.page_limit + that.row_count) < 0 ){
         if(that.fire_previous_page_finish) that.fire_previous_page_finish(); 
       }else{
-        that.index -= that.page_limit*2;
+        debugger;
+        that.index -= (that.page_limit +that.row_count);
+        
         that.erase_rows();
         that.draw_body_content();
       }
     });
-
-   
-
   }
-  this.draw_rows();
+  this.draw_head_content();
 };
 
 
-MortarTable.prototype.draw_rows = function(){
+/*
+ * Erases Entire Table
+ */
+MortarTable.prototype.erase = function(){
+  $(this.table_container_id).empty();
+};
+
+/*
+ * Erases content rows
+ */
+MortarTable.prototype.erase_rows = function(){
+  $('#'+this.table_body_id).empty();
+};
+
+/*
+ * Only draws the body tag of the table using the header items as keys for array
+ */
+MortarTable.prototype.draw_body_content = function(){
+  var key_array = this.key_array;
+  var row_count = 0;
+  for(var i  = this.index; i < this.array.length && row_count < this.page_limit; i++, row_count++){
+    
+    var row = this.array[i];
+    var $table_row = $('#' + this.table_body_id).append('<tr></tr>'); 
+    for( var j = 0; j < key_array.length; j++){
+      $table_row.append('<td>' + row[key_array[j] ] + '</td>');
+    }
+  }
+  this.index += row_count;
+  this.row_count = row_count;
+};
+
+/*
+ * Only draws the body tag of the table using the header items as keys for array
+ */
+MortarTable.prototype.draw_head_content = function(){
   var array = this.array,
       key_array = this.key_array,
       table_header = '#' +this.table_header_id,
@@ -127,61 +156,16 @@ MortarTable.prototype.draw_rows = function(){
   }
 };
 
+
+/**
+ * Hack to get keys
+ */
 MortarTable.prototype.keys = function(hash){
   var keys = [];
   for(var i in hash) if (hash.hasOwnProperty(i)){
     keys.push(i);
   }
-  console.log(keys);
   return keys;
 }
 
-MortarTable.prototype.set_array = function(array){
-  this.array = array;
-  this.index = 0;
-  this.key_array = [];
-  if(this.array.length > 0){
-    var k = this.keys(this.array[0]);
-    for(var i = 0; i < k.length; i++){
-      var key_item = k[i];
-      console.log(key_item);
-      this.key_array.push(key_item);
-    }
-  }
-}
 
-/*
- * Fills in a table using the contents of the array
- *      table_header -- selector for <thead>
- *      table_body -- selector for <tbody>
- *      array -- array containing objects.  keys are required for proper iteration
- */
-$.mortar_data.widgets.draw_table = function(table_header, table_body, array){
-  var key_array = [];
-  if(array.length > 0){
-    $.mortar_data.widgets.erase_table(table_header, table_body);
-
-    $(table_header).append('<tr></tr>');
-    for(key in array[0]){
-      key_array.push(key);
-      $(table_header + ' tr').append('<th>' + key + '</th>'); 
-    }
-
-    for(var i  = 0; i < array.length; i++){
-      
-      var row = array[i];
-      var $table_row = $(table_body).append('<tr></tr>'); 
-      key_array.forEach(function(key){
-        $table_row.append('<td>' + row[key] + '</td>');
-      });
-    }
-  }
-
-
-};
-
-
-$.mortar_data.widgets.erase_table = function(table_header, table_body){
-  $(table_header).empty();
-  $(table_body).empty();
-};
