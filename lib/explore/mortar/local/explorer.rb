@@ -1,5 +1,6 @@
 require "mortar/helpers"
 require "explore/mortar/local/server"
+require "mortar/local/installutil"
 
 require 'sinatra/base'
 require 'thin'

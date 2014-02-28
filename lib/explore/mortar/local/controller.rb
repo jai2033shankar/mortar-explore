@@ -39,6 +39,11 @@ class Mortar::Local::Controller
 
   end
 
+  def voyage
+    require_aws_keys
+    print verify_aws_keys
+  end
+
   private
 
   # Private: launch the web browser once we've heard back and
