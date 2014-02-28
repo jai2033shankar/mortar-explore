@@ -27,6 +27,9 @@ function MortarTable(table_container_id, array, options){
   this.table_class = options.table_class || 'table table-bordered table-condensed table-striped';
   this.page_limit = options.page_limit || 10;
   this.index = 0;
+  console.log(options);
+  this.fire_next_page_finish = options.fire_next_page || null;
+  this.fire_previous_page_finish = options.fire_previous_page || null;
 
   return this;
 };
@@ -36,16 +39,7 @@ MortarTable.prototype.erase = function(){
 };
 
 MortarTable.prototype.erase_rows = function(){
-  debugger;
   $('#'+this.table_body_id).empty();
-};
-
-
-MortarTable.prototype.fire_next_page = function(){
-  };
-
-MortarTable.prototype.fire_previous_page = function(){
-
 };
 
 
@@ -93,7 +87,7 @@ MortarTable.prototype.draw = function(){
     var that = this;
     $('.'+this.next_page_class).click(function(){ /* Hack because we lose reference to this */
       if (that.index >= that.array.length){
-        if(that.fire_next_page_finish) that.fire_previous_page();  
+        if(that.fire_next_page_finish) that.fire_next_page_finish();  
       }else{
         that.erase_rows();
         that.draw_body_content();
@@ -102,7 +96,7 @@ MortarTable.prototype.draw = function(){
     });
     $('.'+this.previous_page_class).click(function(){
       if(that.index == 0 || that.index-(that.page_limit*2) < 0 ){
-        if(that.fire_previous_page_finish) that.fire_next_page_finish(); 
+        if(that.fire_previous_page_finish) that.fire_previous_page_finish(); 
       }else{
         that.index -= that.page_limit*2;
         that.erase_rows();

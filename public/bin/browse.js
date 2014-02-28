@@ -3,9 +3,10 @@
   var browse_table;
   /*  Controller Functions */
   function init_browse(){
-    browse_table = new MortarTable('#browse_table',[], {});
-    $('.browse_next_page').on('click', fire_next_page);
-    $('.browse_previous_page').on('click', fire_previous_page);
+    browse_table = new MortarTable('#browse_table',[], {
+      fire_next_page : fire_next_page,
+      fire_previous_page : fire_previous_page
+    });
     
     get_browse();
   }
@@ -14,6 +15,7 @@
    * Makes api call to /api/v1/browse
    */
   function get_browse(){
+    debugger;
     $.mortar_data.api.get_browse(
       get_browse_by(), //quantity 
       current_index, //index to start browse
@@ -72,8 +74,10 @@
    * Event when back content is clicked
    */
   function fire_previous_page(){
-    current_index -= (get_browse_by()*2);
-    get_browse(); 
+    if(current_index - (get_browse_by()*2) > 0){
+      current_index -= (get_browse_by()*2);
+      get_browse(); 
+    }
   };
 
   /*
@@ -85,10 +89,7 @@
 
   function fire_browse_error(error_message){
     $('#browse_error_row').removeClass('hidden');
-    $.mortar_data.widgets.erase_table(
-          '#browse_table_header',
-          '#browse_table_body'
-        );
+    browse_table.erase(); 
     $('#browse_error').text(error_message);
     
   };
