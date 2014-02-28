@@ -15,7 +15,6 @@
 #
 
 require 'sinatra/base'
-require 'explore/mortar/local/search'
 
 class Server < Sinatra::Base
   # Load the basic page 

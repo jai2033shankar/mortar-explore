@@ -42,4 +42,6 @@ class Mortar::Command::Explore < Mortar::Command::Base
 
     ctrl.explore(project, results_data, options[:port])
   end
+
+
 end
