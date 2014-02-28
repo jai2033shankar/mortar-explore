@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require 'explore/mortar/local/parse' 
+require 'explore/mortar/scraper/parse' 
 
 class Browse
   include Parse
@@ -35,7 +35,9 @@ class Browse
   def browse(quantity, start_index = @index, directory_or_file = nil)
     raw_browsed, error = browse_from_directory(quantity, start_index, directory_or_file) 
     @index = start_index + raw_browsed.length #next time, it will start at the next index
-    return parse_results(raw_browsed, error)
+    results = parse_results(raw_browsed, error)
+    results[:location] = directory_or_file
+    return results 
   end
 
 
@@ -51,7 +53,11 @@ class Browse
         raw_browsed.push( file + ":" + i.to_s + ":" + row ) 
         i = i + 1 
       end
-      return raw_browsed, nil
+      error = nil
+      if raw_browsed.length == 0
+        #error = "The requested directory or file, #{directory_or_file}, does not exist.  Please specify again."
+      end
+      return raw_browsed, error 
     else
       return Array.new, "The requested directory or file, #{directory_or_file}, does not exist.  Please specify again." 
     end
@@ -70,7 +76,10 @@ class Browse
           end
         end
       end
-      file = directory_or_file + "/" + contents[0]
+      if(contents[0]!=nil)
+        file = "#{directory_or_file}/#{contents[0]}"
+      end
+
       
     elsif File.exists?(directory_or_file)
       file = directory_or_file 

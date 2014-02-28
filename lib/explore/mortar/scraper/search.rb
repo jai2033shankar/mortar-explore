@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require 'explore/mortar/local/parse' 
+require 'explore/mortar/scraper/parse' 
 
 class Search
   include Parse

@@ -1,4 +1,4 @@
-require "explore/mortar/local/browse"
+require "explore/mortar/scraper/browse"
 
 
 describe Browse do
@@ -43,6 +43,7 @@ describe Browse do
       browse_results = {
         :item_item_recs => all_item_item_recs[0..4],
         :user_item_recs => [],
+        :location => "item_item_recs",
         :error => nil 
       }
       browse.browse( quantity, index,recommendations).should eq(browse_results)
@@ -53,6 +54,7 @@ describe Browse do
       browse_results = {
         :item_item_recs => all_item_item_recs[4..8],
         :user_item_recs => [],
+        :location => "item_item_recs",
         :error => nil 
       }
       results = browse.browse(5, 5, recommendations)
@@ -64,6 +66,7 @@ describe Browse do
       browse_results = {
         :item_item_recs => all_item_item_recs, 
         :user_item_recs => [],
+        :location => "item_item_recs",
         :error => nil 
       }
       browse.browse( 20, index,recommendations).should eq(browse_results)
@@ -74,6 +77,7 @@ describe Browse do
       browse_results = {
         :item_item_recs => all_item_item_recs[0..4],
         :user_item_recs => [],
+        :location => "item_item_recs/part-r-00000",
         :error => nil
       }
       browse.browse( 5, index, 'item_item_recs/part-r-00000').should eq(browse_results)

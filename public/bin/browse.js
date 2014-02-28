@@ -1,10 +1,14 @@
 (function(){
   var current_index = 1;
+  var browse_table;
   /*  Controller Functions */
   function init_browse(){
-    $('.browse_next_page').on('click', fire_next_page);
-    $('.browse_previous_page').on('click', fire_previous_page);
-    
+    browse_table = new MortarTable('#browse_table',[], {
+      page_limit: get_browse_by(),
+      next_callback : fire_next_page,
+      previous_callback : fire_previous_page
+    });
+    $('#browse_update').click(fire_browse_update);  
     get_browse();
   }
 
@@ -30,6 +34,10 @@
   function fire_reload_table(data){
     
     var data_parsed = JSON.parse(data);
+    if (data_parsed.location == ""){
+      data_parsed.location = './'; 
+    }
+    $('#browse_location').text(data_parsed.location);
     // server returned no error
     if(data_parsed.error == null){
       $('#browse_error_row').addClass('hidden');
@@ -46,11 +54,11 @@
         }
       }
       current_index += largest_array.length; //update current index
-      $.mortar_data.widgets.draw_table(
-                '#browse_table_header', 
-                '#browse_table_body', 
-                largest_array
-            );
+      if(largest_array.length > 0){
+        browse_table.set_array(largest_array);
+        browse_table.draw();
+      }
+     
     } else{
       fire_browse_error(data_parsed.error);
     }
@@ -66,15 +74,22 @@
    * Event when next content is clicked
    */
   function fire_next_page(){
-    get_browse(); 
+    get_browse();
   };
   
   /*
    * Event when back content is clicked
    */
   function fire_previous_page(){
-    current_index -= (get_browse_by()*2);
-    get_browse(); 
+    if(current_index - (get_browse_by() + browse_table.row_count) > 0){
+      current_index -= (get_browse_by() + browse_table.row_count);
+      get_browse(); 
+    }
+  };
+
+  function fire_browse_update(){
+    current_index = 1;
+    get_browse();
   };
 
   /*
@@ -86,10 +101,7 @@
 
   function fire_browse_error(error_message){
     $('#browse_error_row').removeClass('hidden');
-    $.mortar_data.widgets.erase_table(
-          '#browse_table_header',
-          '#browse_table_body'
-        );
+    browse_table.erase(); 
     $('#browse_error').text(error_message);
     
   };

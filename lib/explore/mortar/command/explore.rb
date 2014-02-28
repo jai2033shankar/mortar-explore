@@ -17,7 +17,7 @@
 require "explore/mortar/local/controller"
 require "mortar/command/base"
 
-# Paint results of mortar recsys
+# explore the results of mortar recsys
 class Mortar::Command::Explore < Mortar::Command::Base
 
 
