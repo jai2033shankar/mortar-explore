@@ -39,9 +39,12 @@ class Mortar::Local::Controller
 
   end
 
-  def voyage
+  def voyage(project, s3bucket, directory = nil, port = 3000)
     require_aws_keys
-    print verify_aws_keys
+    explorer = Mortar::Local::Explorer.new(project.root_path)
+
+
+    # Startup Web Server
   end
 
   private
