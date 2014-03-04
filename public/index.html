@@ -16,7 +16,9 @@
               <a class="brand" href="#browse"><img class="logo" src="images/mortar_logo.png"></a>
               <ul class="nav pull-left" id="explore_nav" >
                 <li id="browse_item"><a href="#browse">Browse</a></li>
-                <li id="search_item"><a href="#search">Search</a></li>
+                <% if settings.mode == "local" %>
+                  <li id="search_item"><a href="#search">Search</a></li>
+                <% end %>
               </ul>
             </div>
           </div>
@@ -27,9 +29,11 @@
       <div class="explore_content" id="browse_content">
         <%= @browse_template %>
       </div>
+    <% if settings.mode == "local" %>
       <div class="explore_content" id="search_content">
         <%= @search_template %>
       </div>
+    <% end %>
     </div>
   </body>
   <script src="bin/widget.js"></script>

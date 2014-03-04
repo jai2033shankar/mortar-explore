@@ -15,28 +15,27 @@
 #
 require 'explore/mortar/scraper/parse' 
 
-class Search
-  include Parse
-  attr_accessor :base_directory, :delim_char
-  def initialize(base_directory, delim_char = "\t")
-    @base_directory = base_directory
-    @delim_char = delim_char 
-  end
-  
-  def search(query)
-    cmd = "grep -rn '" + query + "' " +  @base_directory 
-    results = %x[#{cmd}]
-    error = nil
-
-    if (results == nil or results == "")
-      error = "Search string found nothing.  Please specify again"
-      results = []
-    else
-      results = results.split("\n")
+module Local
+  class Search
+    include Parse
+    attr_accessor :base_directory, :delim_char
+    def initialize(base_directory, delim_char = "\t")
+      @base_directory = base_directory
+      @delim_char = delim_char 
     end
-    return parse_results(results, error) 
+    
+    def search(query)
+      cmd = "grep -rn '" + query + "' " +  @base_directory 
+      results = %x[#{cmd}]
+      error = nil
+
+      if (results == nil or results == "")
+        error = "Search string found nothing.  Please specify again"
+        results = []
+      else
+        results = results.split("\n")
+      end
+      return parse_results(results, error) 
+    end
   end
-
-  
-
 end

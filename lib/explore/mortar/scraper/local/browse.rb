@@ -72,16 +72,16 @@ module Local
         for item in all_contents do
           if File.exists?(directory_or_file +"/" +  item)
             # TODO -- sort and use real file names
-            if (item == "part-r-00000")
+            print item[0]
+            if (item[0] != "." and item[0] != "_")
               contents.push(item)
             end
           end
         end
+
         if(contents[0]!=nil)
           file = "#{directory_or_file}/#{contents[0]}"
         end
-
-        
       elsif File.exists?(directory_or_file)
         file = directory_or_file 
       end

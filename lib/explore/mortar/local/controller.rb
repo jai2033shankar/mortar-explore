@@ -14,8 +14,9 @@
 # limitations under the License.
 #
 require "explore/mortar/local/explorer"
-require 'explore/mortar/scraper/search'
+require 'explore/mortar/scraper/local/search'
 require 'explore/mortar/scraper/local/browse'
+require 'explore/mortar/scraper/cloud/browse'
 require "mortar/local/controller"
 
 class Mortar::Local::Controller
@@ -27,7 +28,7 @@ class Mortar::Local::Controller
     Server.set :mode, "local"
     Server.set :data_directory, data_directory 
     Server.set :project_root, project.root_path
-    Server.set :searcher, Search.new(data_directory)
+    Server.set :searcher, Local::Search.new(data_directory)
     Server.set :browser, Local::Browse.new(data_directory)
     begin
       server = Thin::Server.new(Server, '0.0.0.0', port, :signals => false)
@@ -40,15 +41,25 @@ class Mortar::Local::Controller
 
   end
 
-  def voyage(project, s3bucket, directory = nil, port = 3000)
+  def voyage(project, s3_path, directory = nil, port = 3000)
     require_aws_keys
+    
     explorer = Mortar::Local::Explorer.new(project.root_path)
 
-    Server.set :mode, "local" 
-    Server.set :data_directory, s3bucket 
+    Server.set :mode, "cloud" 
+    Server.set :data_directory, s3_path 
     Server.set :project_root, project.root_path
-    Server.set :searcher, Search.new(data_directory)
-    Server.set :browser, Browse.new(data_directory)
+    Server.set :searcher, nil 
+    Server.set :browser, Cloud::Browse.new(s3_path)
+
+    begin
+      server = Thin::Server.new(Server, '0.0.0.0', port, :signals => false)
+    rescue => e
+      print 'error'
+    end
+
+    launch_browser(port)
+    server.start
 
 
 

@@ -6,11 +6,7 @@
 # this file is here to facilitate running it.
 #
 
-require 'pathname'
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path("../../Gemfile",
-  Pathname.new(__FILE__).realpath)
+$:.unshift File.expand_path '../../bundle', __FILE__
 
-require 'rubygems'
 require 'bundler/setup'
-
-load Gem.bin_path('aws-sdk-core', 'aws.rb')
+load File.expand_path '../../bundle/ruby/1.8/gems/aws-sdk-core-2.0.0.rc6/bin/aws.rb', __FILE__

@@ -83,6 +83,9 @@ module Local
         browse.browse( 5, index, 'item_item_recs/part-r-00000').should eq(browse_results)
       end
 
+      it "starts to browse next file when it has reached the end of the first file" do
+      end
+
       it "returns an error message that Directory/File does not exit" do
         results = browse.browse(20,1, "fake file")
         results[:error].should eq("The requested directory or file, spec/fake/fake file, does not exist.  Please specify again.")

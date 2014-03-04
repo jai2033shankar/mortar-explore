@@ -32,8 +32,10 @@ class Server < Sinatra::Base
     searcher = settings.searcher 
     print '\nsearching...'
     print params
-    if query != nil and query != "" 
-      body{ searcher.search(query).to_json }
+    if searcher == nil
+      body {{:error => 'Cannot search in this mode.'}.to_json}
+    elsif query != nil and query != "" 
+      body{ searcher.search(query).to_json}
     else
       print 'return no search error'
       body {{:error => 'No search query was given.  Please specify'}.to_json}

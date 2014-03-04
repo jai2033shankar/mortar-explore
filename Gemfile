@@ -12,7 +12,7 @@ gem 'eventmachine'
 gem 'json'
 gem 'mortar'
 
-gem 'aws-sdk-core'
+gem 'aws-sdk'
 
 group :development do
   gem 'rake'
