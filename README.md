@@ -51,6 +51,8 @@ This will start a file watcher over the Mortar Explore repo, any changes will ca
 $ rake clean
 ```
 
-### Known Issues ###
+### Known Issues/TODO ###
 
-* Current file reading of browsing is very slow. should find way to make it better
+* Validation for confirming if it is an s3 bucket or is a directory
+* ability to move from one part file to the next
+* ability to set configuration of output
