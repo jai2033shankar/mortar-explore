@@ -66,6 +66,10 @@ class Mortar::Local::Controller
     # Startup Web Server
   end
 
+  def download_from_bucket(s3_path, output_directory)
+    
+  end
+
   private
 
   # Private: launch the web browser once we've heard back and

@@ -81,25 +81,26 @@ module Cloud
       str = "" 
       begin
         catch :break do
-          s3_object.read({range:1000}) do |chunk|
-            str = String.try_convert(chunk)
+          s3_object.read do |chunk|
+            str = chunk.to_s
             throw :break
           end
         end
       rescue
       end
-      print 'doing'
       # failing to split properly :(
       str.split("\n").each do |line|
-        print 'hi'
         if (count >= index)
           content.push(@object_key + ":" + count.to_s + ":" + line) 
-          if count >= index + quantity
+          if count >= index + quantity-1
             print content
+            break
           end
         end
         count = count + 1
       end
+      print content
+      print 'returning...'
       return content
 
     end

@@ -61,6 +61,10 @@ class Mortar::Command::Explore < Mortar::Command::Base
     end
     ctrl = Mortar::Local::Controller.new
 
+    if options[:local]
+      ctrl.download_from_bucket(s3_bucket, options[:local])
+    end
+
     ctrl.voyage(project, s3_bucket, options[:port])
 
   end
