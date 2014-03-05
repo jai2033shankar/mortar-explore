@@ -26,7 +26,23 @@ module Cloud
         browse.object_key.should eq(s3_object)
         browse.base_directory.should eq(s3_bucket_success)
         browse.delim_char.should eq("\t")
+
+
       end
+
+      it "should be able to initialize directories" do
+
+        browse_two = Browse.new("s3://spec/fake")
+        browse_three = Browse.new("s3://spec/fake/")
+        
+        browse_two.bucket.should eq('spec')
+        browse_two.object_key.should eq('fake')
+
+        browse_three.bucket.should eq('spec')
+        browse_three.object_key.should eq('fake')
+
+      end
+
 
       it "should find a bucket" do
         browse.get_bucket.should eq(fake_bucket_success)

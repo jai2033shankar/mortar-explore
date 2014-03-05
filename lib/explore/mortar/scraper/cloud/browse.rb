@@ -27,6 +27,10 @@ module Cloud
       @bucket = s3_path[5, s3_path[5,s3_path.length()-1].index('/')]
       @base_directory = s3_path 
       @object_key = s3_path[s3_path.index(@bucket) + @bucket.length()+1, @base_directory.length()]
+
+      if @object_key[@object_key.length-1] == "/"
+        @object_key = @object_key[0, @object_key.length-1]
+      end
       @delim_char = delim_char 
       @index = 1
       # aws keys set from calling require_aws_keys
@@ -35,11 +39,14 @@ module Cloud
     end
 
     def browse(quantity, start_index = @index, directory_or_file = nil)
-      #obj = s3.buckets['cngan-dev/retail'].objects['key']
       bucket =  get_bucket
       if bucket != nil
         s3_obj = get_s3_object(bucket)
-        return parse_results(get_content(s3_obj, quantity, start_index))
+        if s3_obj != nil
+          return parse_results(get_content(s3_obj, quantity, start_index))
+        else
+          return {:error => "Specified object #{@object_key} does not exist."}
+        end
       else
         return {:error => "Specified bucket #{@bucket} does not exist."}
       end
@@ -63,11 +70,14 @@ module Cloud
         #attempt to find item
         valid_items = Array.new
         bucket.objects.each do |obj|
-          print obj
-          if obj.key[@object_key.length+1, obj.key.to_s.length-1].index('/')
-            valid_items.push(obj)
+          if obj.key.index(@object_key) != nil and  obj.key.index(@object_key) == 0
+            attempt =  obj.key.to_s[@object_key.length+1, obj.key.to_s.length-1]
+            if attempt != nil and attempt != "" and attempt[attempt.length-1] != "/" # last character is not slash, and hence is a file
+              valid_items.push(obj)
+            end
           end
         end
+
         if valid_items.length > 0
           return valid_items[0] 
         end
@@ -84,7 +94,7 @@ module Cloud
           s3_object.read do |chunk|
             chunk.to_s.split("\n").each do |line|
               if (count >= index)
-                content.push(@object_key + ":" + count.to_s + ":" + line) 
+                content.push(s3_object.key + ":" + count.to_s + ":" + line) 
                 if count >= index + quantity-1
                   throw :break
                 end
