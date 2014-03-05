@@ -83,7 +83,6 @@ module Cloud
         catch :break do
           s3_object.read do |chunk|
             chunk.to_s.split("\n").each do |line|
-              print count
               if (count >= index)
                 content.push(@object_key + ":" + count.to_s + ":" + line) 
                 if count >= index + quantity-1
