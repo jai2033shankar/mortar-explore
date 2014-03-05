@@ -72,7 +72,7 @@ module Cloud
         bucket.objects.each do |obj|
           if obj.key.index(@object_key) != nil and  obj.key.index(@object_key) == 0
             attempt =  obj.key.to_s[@object_key.length+1, obj.key.to_s.length-1]
-            if attempt != nil and attempt != "" and attempt[attempt.length-1] != "/" # last character is not slash, and hence is a file
+            if attempt != nil and attempt != "" and !attempt.index("/") # last character is not slash, and hence is a file
               valid_items.push(obj)
             end
           end
