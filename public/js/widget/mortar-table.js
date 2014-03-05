@@ -89,11 +89,9 @@ MortarTable.prototype.draw = function(){
     });
     /* Event handler for back page click */
     $('.'+this.previous_page_class).click(function(){
-      debugger;
       if(that.index == 0 || that.index-(that.page_limit + that.row_count) < 0 ){
         if(that.fire_previous_page_finish) that.fire_previous_page_finish(); 
       }else{
-        debugger;
         that.index -= (that.page_limit +that.row_count);
         
         that.erase_rows();
