@@ -39,7 +39,11 @@ To help develop Mortar Explore, make sure you have the latest version of the Mor
 ```
 $ bundle install --standalone
 ```
-Once completed, run:
+Once completed, you need to use ruby 1.8.7 to run rake.  So ensure you are using with rvm by running:
+```
+$ rvm use 1.8.7
+```
+Then run:
 
 ```
 $ rake watch

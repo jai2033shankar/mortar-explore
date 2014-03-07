@@ -59,7 +59,9 @@
         current_index = ( Math.floor(current_index/get_browse_by() ) + 1 ) * 50 + 1;
         browse_table.set_array(largest_array);
         browse_table.draw();
-      }
+      } else{
+//fire_browse_error('No file could be found in this directory.  Please specify.'); 
+      } 
      
     } else{
       fire_browse_error(data_parsed.error);
