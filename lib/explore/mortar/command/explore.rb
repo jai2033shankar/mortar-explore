@@ -34,7 +34,7 @@ class Mortar::Command::Explore < Mortar::Command::Base
   def index
     results_data  = shift_argument
     unless results_data 
-      error("Usage: mortar explore OUTPUT_DIRECTORY\nMust specify PIGSCRIPT.")
+      error("Usage: mortar explore OUTPUT_DIRECTORY\nMust specify DIRECTORY.")
     end
     validate_arguments!
     ctrl = Mortar::Local::Controller.new
@@ -44,4 +44,29 @@ class Mortar::Command::Explore < Mortar::Command::Base
   end
 
 
+  # voyage S3_BUCKET
+  #
+  # Explore through your results stored in an s3 bucket
+  #
+  # -t, --port PORT  # What port the pig server should run on.
+  # -l, --local DOWNLOAD_DIR # Download bucket to local machine for viewing, specify where to download to
+  #
+  # Examples:
+  #
+  #     $ mortar voyage s3://mortar-example
+  def voyage
+    s3_bucket = shift_argument
+    unless s3_bucket
+      error("Usage: mortar voyage S3_BUCKET\nMust specify bucket.")
+    end
+    ctrl = Mortar::Local::Controller.new
+
+    if options[:local]
+      ctrl.download_from_bucket(s3_bucket, options[:local])
+    end
+
+    ctrl.voyage(project, s3_bucket, options[:port])
+
+  end
+  alias_command "voyage", "explore:voyage"
 end

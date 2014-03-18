@@ -53,11 +53,15 @@
           }
         }
       }
-      current_index += largest_array.length; //update current index
+      debugger;
+      //current_index += largest_array.length; //update current index
       if(largest_array.length > 0){
+        current_index = ( Math.floor(current_index/get_browse_by() ) + 1 ) * 50 + 1;
         browse_table.set_array(largest_array);
         browse_table.draw();
-      }
+      } else{
+//fire_browse_error('No file could be found in this directory.  Please specify.'); 
+      } 
      
     } else{
       fire_browse_error(data_parsed.error);
@@ -81,10 +85,10 @@
    * Event when back content is clicked
    */
   function fire_previous_page(){
-    if(current_index - (get_browse_by() + browse_table.row_count) > 0){
-      current_index -= (get_browse_by() + browse_table.row_count);
-      get_browse(); 
-    }
+    current_index = (Math.floor(current_index/get_browse_by())-2)*50 +1;
+    current_index = current_index <=0 ? 1 : current_index;
+    get_browse(); 
+      
   };
 
   function fire_browse_update(){
