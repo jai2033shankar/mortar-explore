@@ -12,6 +12,7 @@ gem 'eventmachine'
 gem 'json'
 gem 'mortar'
 
+gem 'nokogiri', '~> 1.5.0'
 gem 'aws-sdk'
 
 group :development do
