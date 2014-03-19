@@ -43,7 +43,7 @@ module Local
 
 
     def browse_from_directory(quantity, start_index, directory_or_file)
-      directory_or_file == nil ? directory_or_file = @base_directory:  directory_or_file = @base_directory + "/" + directory_or_file
+      directory_or_file = directory_or_file == nil ?  @base_directory : @base_directory + "/" + directory_or_file
       file = find_file (directory_or_file)
       if file != nil 
         raw_browsed = Array.new
@@ -56,7 +56,7 @@ module Local
         end
         error = nil
         if raw_browsed.length == 0
-          #error = "The requested directory or file, #{directory_or_file}, does not exist.  Please specify again."
+          error = "The requested directory or file, #{directory_or_file}, does not exist.  Please specify again."
         end
         return raw_browsed, error 
       else
@@ -72,8 +72,7 @@ module Local
         for item in all_contents do
           if File.exists?(directory_or_file +"/" +  item)
             # TODO -- sort and use real file names
-            print item[0]
-            if (item[0] != "." and item[0] != "_")
+            if (item[0,1] != "." and item[0,1] != "_")
               contents.push(item)
             end
           end

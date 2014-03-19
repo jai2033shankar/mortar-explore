@@ -20,8 +20,6 @@ module Parse
 
   # returns a specific line in a file
   def get_line_in_file(file, line)
-    #f = File.open(file)
-    #[*f][line-1]
     cmd = "sed -n '#{line}p' #{file}"
     result = %x[#{cmd}]
   end
@@ -32,12 +30,12 @@ module Parse
   #           *NOTE the ':' character is used to seperate the fields
   #           this fails if a directory name has ':' in it
   def parse_results(input_array, error= nil)
-     results = {
+    results = {
       :item_item_recs => Array.new,
       :user_item_recs => Array.new,
       :error => error 
     }
-    for row in input_array do
+    input_array.each do |row|
       begin
         search_data = row.split(':', 3)
         row_data = search_data[2].split(delim_char).map(&:strip)
@@ -57,6 +55,7 @@ module Parse
   #     search_data - metadata and each row including [ FILE_NAME, LINE_NUMBER]
   #     arr - resulting array hash map is pushed to
   def parse_item_item(row_data, search_data, arr)
+    
     arr.push({
       :line => search_data[1],
       :file => search_data[0],
@@ -87,7 +86,6 @@ module Parse
       :rank => row_data[6]  
     })
   end
-
   
 
 end
