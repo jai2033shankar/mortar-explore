@@ -24,34 +24,34 @@ module Cloud
 
     end
 
-#    context("success") do
-#      before(:each)do
-#        browse = Browse.new(s3_bucket_success)
-#      end
-#      it "should be initialized to have bucket, object key, delim_char and directory set" do
-#        browse.bucket.should eq('good-bucket')
-#        browse.object_key.should eq(keys[0])
-#        browse.base_directory.should eq(s3_path_success)
-#        browse.delim_char.should eq("\t")
-#
-#
-#      end
-#
-#      it "should be able to initialize directories" do
-#
-#        browse_two = Browse.new("s3://spec/fake")
-#        browse_three = Browse.new("s3://spec/fake/")
-#        
-#        browse_two.bucket.should eq('spec')
-#        browse_two.object_key.should eq('fake')
-#
-#        browse_three.bucket.should eq('spec')
-#        browse_three.object_key.should eq('fake')
-#
-#      end
-#
+    context("success") do
+      before(:each)do
+        browse = Browse.new(s3_path_success)
+      end
+      it "should be initialized to have bucket, object key, delim_char and directory set" do
+        browse.bucket.should eq('good-bucket')
+        browse.object_key.should eq(keys[0].key)
+        browse.base_directory.should eq(s3_path_success)
+        browse.delim_char.should eq("\t")
+
+
+      end
+
+      it "should be able to initialize directories" do
+
+        browse_two = Browse.new("s3://spec/fake")
+        browse_three = Browse.new("s3://spec/fake/")
+        
+        browse_two.bucket.should eq('spec')
+        browse_two.object_key.should eq('fake')
+
+        browse_three.bucket.should eq('spec')
+        browse_three.object_key.should eq('fake/')
+
+      end
+
 #      it "should find a bucket" do
-#        browse.get_bucket.should eq(fake_bucket_success)
+#       browse.get_bucket.should eq(buckets[0])
 #      end
 #
 #      it "should return the first file if object is directory" do
@@ -80,6 +80,6 @@ module Cloud
 #        }
 #        browse.browse(0).should eq(browse_results)
 #      end
-#    end
+    end
   end
 end
