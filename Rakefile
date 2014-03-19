@@ -68,23 +68,26 @@ task :install do
   end
 end
 
-
+def compile_js (input_dir, output_dir, output_file)
+  out = ""
+  FileUtils.rm_rf(Dir.glob("#{output_dir}/*")) 
+  Dir["#{input_dir}/*"].each do |directory|
+    Dir[directory+"/*"].each do |file|
+      out += File.read(file)
+    end  
+    base =  directory.split('/') 
+  
+  end
+  File.open("#{output_dir}/#{output_file}", "a") { |file|
+    file.write(out)
+  }
+end
 
 desc "Compile javascript"
 task :compile_js do
   action "Compiling javascript..." do
-    out = ""
-    FileUtils.rm_rf(Dir.glob("public/bin/*")) 
-    Dir["public/js/*"].each do |directory|
-      Dir[directory+"/*"].each do |file|
-        out += File.read(file)
-      end  
-      base =  directory.split('/') 
-    
-    end
-    File.open("public/bin/main.js", "a") { |file|
-      file.write(out)
-    }
+    compile_js("public/js", "public/bin", "main.js")  
+    compile_js("public/test/spec", "public/test/bin", "mainSpec.js")  
   end
 end
 
