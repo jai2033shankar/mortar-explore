@@ -1,4 +1,5 @@
 require "explore/mortar/scraper/local/browse"
+require 'ruby-debug'
 
 module Local
   describe Browse do
@@ -69,7 +70,7 @@ module Local
           :location => "item_item_recs",
           :error => nil 
         }
-        browse.browse( 20, index,recommendations).should eq(browse_results)
+        browse.browse( 20, 1,recommendations).should eq(browse_results)
         browse.index.should eq(16)
       end
 
@@ -83,8 +84,6 @@ module Local
         browse.browse( 5, index, 'item_item_recs/part-r-00000').should eq(browse_results)
       end
 
-      it "starts to browse next file when it has reached the end of the first file" do
-      end
 
       it "returns an error message that Directory/File does not exit" do
         results = browse.browse(20,1, "fake file")

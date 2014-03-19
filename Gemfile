@@ -18,6 +18,7 @@ gem 'aws-sdk'
 group :development do
   gem 'rake'
   gem 'therubyracer'
+  gem 'ruby-debug'
   gem 'less'
   gem 'rspec'
   gem 'rr'
