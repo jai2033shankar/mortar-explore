@@ -3,6 +3,7 @@
   function init_page(){
     window.onhashchange = function(e) {
       on_hash_change();
+      console.log('yay');
     };
     window.location.hash = '#browse';
     on_hash_change();

@@ -73,17 +73,18 @@ end
 desc "Compile javascript"
 task :compile_js do
   action "Compiling javascript..." do
+    out = ""
     FileUtils.rm_rf(Dir.glob("public/bin/*")) 
     Dir["public/js/*"].each do |directory|
-      out = ""
       Dir[directory+"/*"].each do |file|
         out += File.read(file)
       end  
       base =  directory.split('/') 
-      File.open("public/bin/" + base[base.length-1] + ".js", "a") { |file|
-        file.write(out)
-      }
+    
     end
+    File.open("public/bin/main.js", "a") { |file|
+      file.write(out)
+    }
   end
 end
 
