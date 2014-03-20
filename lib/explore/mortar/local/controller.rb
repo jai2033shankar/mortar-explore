@@ -16,20 +16,22 @@
 require "explore/mortar/local/explorer"
 require 'explore/mortar/scraper/local/search'
 require 'explore/mortar/scraper/local/browse'
+require 'explore/mortar/scraper/local/recommend'
 require 'explore/mortar/scraper/cloud/browse'
 require "mortar/local/controller"
 
 class Mortar::Local::Controller
-  def explore(project, data_directory, port)
+  def explore(project, data_directory, port, recsys=nil)
     port ||= 3000 
     explorer = Mortar::Local::Explorer.new(project.root_path)
 
     # Startup Web server
-    Server.set :mode, "local"
+    Server.set :mode, recsys ? "recsys" : "local"
     Server.set :data_directory, data_directory 
     Server.set :project_root, project.root_path
     Server.set :searcher, Local::Search.new(data_directory)
     Server.set :browser, Local::Browse.new(data_directory)
+    Server.set :recommender, recsys ? Local::Recommend.new(data_directory) : nil
     begin
       server = Thin::Server.new(Server, '0.0.0.0', port, :signals => false)
     rescue => e

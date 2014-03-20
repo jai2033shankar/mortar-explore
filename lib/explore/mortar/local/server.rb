@@ -52,6 +52,19 @@ class Server < Sinatra::Base
     body { browser.browse(quantity, index, directory).to_json }
   end 
 
+  get '/api/v1/recommend' do
+    item_a = params[:itemA]
+    directory = (params[:directory] == nil or params[:directory] == "") ?  nil : params[:directory] 
+    recommender  = settings.recommender
+    if recommender == nil
+      body {{:error => 'Can not recommend in this mode.'}.to_json}
+    elsif item_a == nil
+      body {{:error => 'No query was given.'}.to_json}
+    else
+      body { recommender.get_recommendations(item_a, directory).to_json}
+    end
+  end
+
 
 end
 
