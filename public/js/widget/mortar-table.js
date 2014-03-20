@@ -27,6 +27,7 @@ function MortarTable(table_container_id, array, options){
   this.index = 0;
   this.fire_next_page_finish = options.next_callback || null;
   this.fire_previous_page_finish = options.previous_callback || null;
+  this.clickable_column = options.clickable_column || null;
 
   return this;
 };
@@ -128,7 +129,11 @@ MortarTable.prototype.draw_body_content = function(){
     var row = this.array[i];
     var $table_row = $('#' + this.table_body_id).append('<tr></tr>'); 
     for( var j = 0; j < key_array.length; j++){
-      $table_row.append('<td>' + row[key_array[j] ] + '</td>');
+      if (this.clickable_column == j){
+        $table_row.append('<td><a href=#detail_' + row[key_array[j]] + '>' + row[key_array[j] ] + '</a></td>');
+      } else{
+        $table_row.append('<td>' + row[key_array[j] ] + '</td>');
+      }
     }
   }
   this.index += row_count;
