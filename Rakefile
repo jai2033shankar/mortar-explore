@@ -87,7 +87,7 @@ desc "Compile javascript"
 task :compile_js do
   action "Compiling javascript..." do
     compile_js("public/js", "public/bin", "main.js")  
-    compile_js("public/test/spec", "public/test/bin", "mainSpec.js")  
+    compile_js("public/test/spec/src", "public/test/bin", "mainSpec.js")  
   end
 end
 

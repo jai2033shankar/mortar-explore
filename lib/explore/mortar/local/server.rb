@@ -21,6 +21,7 @@ class Server < Sinatra::Base
   get '/' do
     @search_template = File.read(settings.resource_locations["search"]).to_s
     @browse_template = File.read(settings.resource_locations["browse"]).to_s
+    @detail_template = File.read(settings.resource_locations["detail"]).to_s
     erb File.read(settings.resource_locations["index"]).to_s
   end
 
@@ -53,7 +54,8 @@ class Server < Sinatra::Base
   end 
 
   get '/api/v1/recommend' do
-    item_a = params[:itemA]
+    item_a = params[:query]
+    print item_a
     directory = (params[:directory] == nil or params[:directory] == "") ?  nil : params[:directory] 
     recommender  = settings.recommender
     if recommender == nil
@@ -76,5 +78,6 @@ Server.set :public_folder, File.expand_path( public_folder_str,__FILE__)
 Server.set(:resource_locations, {
   "index" => File.expand_path(public_folder_str + "/index.html", __FILE__),
   "search" => File.expand_path(public_folder_str + "/templates/search.html", __FILE__),
+  "detail" => File.expand_path(public_folder_str + "/templates/details.html", __FILE__),
   "browse" => File.expand_path(public_folder_str + "/templates/browse.html", __FILE__)
 })

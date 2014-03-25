@@ -130,7 +130,8 @@ MortarTable.prototype.draw_body_content = function(){
     var $table_row = $('#' + this.table_body_id).append('<tr></tr>'); 
     for( var j = 0; j < key_array.length; j++){
       if (this.clickable_column == j){
-        $table_row.append('<td><a href=#detail_' + row[key_array[j]] + '>' + row[key_array[j] ] + '</a></td>');
+        debugger;
+        $table_row.append('<td><a href="' + window.location.hash +'/'+ row[key_array[j]] + '">' + row[key_array[j] ] + '</a></td>');
       } else{
         $table_row.append('<td>' + row[key_array[j] ] + '</td>');
       }

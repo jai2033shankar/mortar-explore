@@ -64,12 +64,11 @@ class Mortar::Local::Controller
     server.start
 
 
-
     # Startup Web Server
   end
 
   def download_from_bucket(s3_path, output_directory)
-    
+        
   end
 
   private

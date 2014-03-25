@@ -14,8 +14,15 @@
     $('#explore_nav li').removeClass('active');
     $('.explore_content').addClass('hidden');
     var hash = window.location.hash;
-    $(hash + '_item').addClass('active');  
-    $(hash + '_content').removeClass('hidden');
+    if (hash.search('/')>0){
+      $('#detail_item').addClass('active');
+      $('#detail_content').removeClass('hidden'); 
+      $.mortar_data.details_view.init();
+    }else{
+      $(hash + '_item').addClass('active');  
+      $(hash + '_content').removeClass('hidden');
+ 
+    };
   };
 
   $(document).ready(function()  {

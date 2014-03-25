@@ -39,4 +39,19 @@ describe("Api", function() {
       });
     });
   });
+
+  describe("get_recommend", function() {
+    var query = 'my_query',
+        directory = 'dir';
+
+    it("should set the params correctly", function() {
+      api.get_recommend(query, directory,'foo', 'bar'); 
+      expect($.ajax).toHaveBeenCalledWith({
+        url: '/api/v1/recommend',
+        data: {query:query, directory:directory},
+        success: 'foo',
+        error: 'bar'
+      });
+    });
+  });
 });
