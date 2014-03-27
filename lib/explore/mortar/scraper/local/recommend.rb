@@ -35,7 +35,7 @@ module Local
 
     def get_recommendations_from_directory(item_id, directory_or_file)
       directory_or_file = directory_or_file == nil ?  @base_directory : @base_directory + "/" + directory_or_file
-      file = find_file (directory_or_file)
+      file = find_file(directory_or_file)
       raw_str = search_column(file, item_id, "1") 
       raw_recs = Array.new
       for row in raw_str.split("\n")
