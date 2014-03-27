@@ -27,6 +27,7 @@ class Mortar::Command::Explore < Mortar::Command::Base
   # while you work.
   #
   # -t, --port PORT  # What port the pig server should run on.
+  # -r, --recsys     # A recsys specific option
   #
   # Examples:
   #
@@ -40,7 +41,7 @@ class Mortar::Command::Explore < Mortar::Command::Base
     ctrl = Mortar::Local::Controller.new
     
 
-    ctrl.explore(project, results_data, options[:port])
+    ctrl.explore(project, results_data, options[:port], options[:recsys])
   end
 
 

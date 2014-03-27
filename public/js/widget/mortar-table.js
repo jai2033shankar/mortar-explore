@@ -27,6 +27,7 @@ function MortarTable(table_container_id, array, options){
   this.index = 0;
   this.fire_next_page_finish = options.next_callback || null;
   this.fire_previous_page_finish = options.previous_callback || null;
+  this.clickable_column = options.clickable_column || null;
 
   return this;
 };
@@ -76,7 +77,8 @@ MortarTable.prototype.draw = function(){
         '</div>'
     );
     var that = this;
-
+    debugger;
+    //$(this.table_id).tablesorter();
     /* Event handler for next page click */
     $('.'+this.next_page_class).click(function(){ /* Hack because we lose reference to this */
       if (that.index >= that.array.length){
@@ -127,10 +129,17 @@ MortarTable.prototype.draw_body_content = function(){
     
     var row = this.array[i];
     var $table_row = $('#' + this.table_body_id).append('<tr></tr>'); 
+    $table_row = $('#' + this.table_body_id + ' tr:last');
     for( var j = 0; j < key_array.length; j++){
-      $table_row.append('<td>' + row[key_array[j] ] + '</td>');
+      if (this.clickable_column == j){
+        $table_row.append('<td><a  href="' + window.location.hash +'/'+ row[key_array[j]] + '">' + row[key_array[j] ] + '</a></td>');
+      } else{
+        $table_row.append('<td>' + row[key_array[j] ] + '</td>');
+      }
     }
   }
+
+  //$(this.table_id).trigger('update');
   this.index += row_count;
   this.row_count = row_count;
 };

@@ -28,3 +28,32 @@ $.mortar_data.api.get_search = function(search_text, success_callback, error_cal
     error: error_callback
   });
 };
+
+$.mortar_data.api.get_recommend = function(query, directory, success_callback, error_callback){
+  var params = {
+    query : query,
+    directory: directory
+  };
+
+  $.ajax({
+    url: '/api/v1/recommend',
+    data: params,
+    success: success_callback,
+    error: error_callback
+  });
+};
+
+
+$.mortar_data.api.put_url_config = function(image_url, item_url){
+  var params = {
+    image_url: image_url,
+    item_url: item_url 
+  };
+
+  $.ajax({
+    url: '/api/v1/config',
+    data: params,
+    type: 'PUT' 
+  });
+
+};

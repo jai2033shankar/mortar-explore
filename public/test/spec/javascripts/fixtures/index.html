@@ -6,16 +6,6 @@
     <link rel="stylesheet" type="text/css" href="css/base.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="libs/jquery-1.11.0.min.js"></script>
-    <!--<script src="libs/jquery.tablesorter.min.js"></script>-->
-      <script type="text/javascript">
-
-        <% if settings.mode == "recsys" %>
-          var IMAGE_URL = "<%= settings.image_url %>";
-          var ITEM_URL = "<%= settings.item_url %>";
-        <% end %>
-
-        var MODE = "<%= settings.mode %>"
-      </script>
   </head>
   <body>
     <div class="navbar">
@@ -35,7 +25,6 @@
         </div>
       </div>
     </div> 
-
     <div class="container" id="explore_container">
       <div class="explore_content" id="browse_content">
         <%= @browse_template %>

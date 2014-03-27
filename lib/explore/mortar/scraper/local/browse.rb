@@ -44,7 +44,7 @@ module Local
 
     def browse_from_directory(quantity, start_index, directory_or_file)
       directory_or_file = directory_or_file == nil ?  @base_directory : @base_directory + "/" + directory_or_file
-      file = find_file (directory_or_file)
+      file = find_file(directory_or_file)
       if file != nil 
         raw_browsed = Array.new
         cmd = "sed -n '#{start_index},#{start_index+quantity-1}p' #{file}" 
@@ -63,30 +63,6 @@ module Local
         return Array.new, "The requested directory or file, #{directory_or_file}, does not exist.  Please specify again." 
       end
     end
-
-    def find_file(directory_or_file)
-      file = nil
-      if File.directory?(directory_or_file)
-        all_contents = Dir.entries(directory_or_file)
-        contents = Array.new
-        for item in all_contents do
-          if File.exists?(directory_or_file +"/" +  item)
-            # TODO -- sort and use real file names
-            if (item[0,1] != "." and item[0,1] != "_")
-              contents.push(item)
-            end
-          end
-        end
-
-        if(contents[0]!=nil)
-          file = "#{directory_or_file}/#{contents[0]}"
-        end
-      elsif File.exists?(directory_or_file)
-        file = directory_or_file 
-      end
-      return file
-    end
-    
 
   end
 
