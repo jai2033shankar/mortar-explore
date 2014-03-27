@@ -2,4 +2,3 @@
 *.DS_store
 bundle/
 tags
-bin/
