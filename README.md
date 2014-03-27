@@ -2,6 +2,7 @@
 
 Mortar Explore is a plugin for the [Mortar Gem](https://github.com/mortardata/mortar). It provides instant feedback about what is happening in your Pig script. On save, Mortar Explore will illustrate your data and feed the results to a local webpage.
 
+
 ### Installation ###
 
 Before getting started make sure you already have [Mortar installed](http://help.mortardata.com/reference/mortar_project_reference/install_mortar_development_framework).

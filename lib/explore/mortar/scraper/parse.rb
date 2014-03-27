@@ -24,6 +24,35 @@ module Parse
     result = %x[#{cmd}]
   end
 
+  def search_column(file, query, column)
+    cmd = "awk '$1==\"#{query}\" {print NR,$0}' #{file}"
+    result = %x[#{cmd}]
+  end
+
+  def find_file(directory_or_file)
+    file = nil
+    if File.directory?(directory_or_file)
+      all_contents = Dir.entries(directory_or_file)
+      contents = Array.new
+      for item in all_contents do
+        if File.exists?(directory_or_file +"/" +  item)
+          # TODO -- sort and use real file names
+          if (item[0,1] != "." and item[0,1] != "_")
+            contents.push(item)
+          end
+        end
+      end
+
+      if(contents[0]!=nil)
+        file = "#{directory_or_file}/#{contents[0]}"
+      end
+    elsif File.exists?(directory_or_file)
+      file = directory_or_file 
+    end
+    return file
+  end
+    
+
   # parse results from a string array 
   #     input_array - array of strings where strings are formated as...
   #           FILE_PATH:LINE_NUMBER:Line_DATA
@@ -43,6 +72,8 @@ module Parse
           parse_item_item(row_data, search_data, results[:item_item_recs])
         elsif row_data.length == UI_COUNT
           parse_user_item(row_data, search_data, results[:user_item_recs])
+        #else
+        #  parse_generic_item(search_data[2], search_data, results[:generic_item])
         end
       rescue
       end
@@ -58,13 +89,13 @@ module Parse
     
     arr.push({
       :line => search_data[1],
-      :file => search_data[0],
-      :type => "item_item",
       :item_A => row_data[0], 
       :item_B => row_data[1], 
       :weight => row_data[2], 
       :raw_weight => row_data[3], 
-      :rank => row_data[4]
+      :rank => row_data[4],
+      :type => "item_item",
+      :file => search_data[0],
     }) 
   end
 
@@ -75,16 +106,26 @@ module Parse
   def parse_user_item(row_data, search_data, arr)
     arr.push({
       :line => search_data[1],
-      :file => search_data[0],
-      :type => "user_item",
       :user => row_data[0],
       :item => row_data[1],
       :weight => row_data[2],
       :reason_item => row_data[3],  
       :user_reason_item_weight => row_data[4],  
       :item_reason_item_weight => row_data[5],  
-      :rank => row_data[6]  
+      :rank => row_data[6],
+      :type => "user_item",
+      :file => search_data[0]
     })
+  end
+
+  def parse_generic_item(row_data, search_data, arr)
+    arr.push({
+      :line => search_data[1],
+      :file => search_data[0],
+      :type => "generic_item"
+      
+    })
+      
   end
   
 

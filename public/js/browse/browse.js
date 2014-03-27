@@ -6,7 +6,8 @@
     browse_table = new MortarTable('#browse_table',[], {
       page_limit: get_browse_by(),
       next_callback : fire_next_page,
-      previous_callback : fire_previous_page
+      previous_callback : fire_previous_page,
+      clickable_column: MODE == 'recsys'? 1: null
     });
     $('#browse_update').click(fire_browse_update);  
     get_browse();
