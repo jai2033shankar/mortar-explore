@@ -8,20 +8,39 @@
   </div>
 </div>
 <div class="row">
-  <div class="span12">
-    <div class="well">
-      <img id="item_img"></img>
+  <div class="span6">
+    <div class="panel">
+      <h1>Item Information</h1>
+      <div class="well">
+        <img class="thumbnail" id="item_img"></img>
+        <p >Item ID:<span id="item_id"></span></p>
+        <a target="_blank" class="center" id="item_link">To Item Page</a>
+      </div>
+    </div>
+    <div class="panel">
+      <h1>URL Configuration</h1>
+      <label class="" for="image_url">Image URL</label>
+      <input type="text" class="span6"id="image_url">
+      <label class="" for="item_url">Item URL</label>
+      <input type="text" class="span6" id="item_url">
+      <button class="btn btn-primary" id="update_url" type="button">Apply URL Changes</button>
+    </div>
+  </div>
+  <div class="span6">
+    <div class="panel">
+      <h1>Recommendations</h1>
+      <ul class="thumbnails" id="recommendation_list">
+      </ul>
     </div>
   </div>
 </div>
-<div class="row">
-  <div class="span12">
-    <ul class="thumbnails" id="recommendation_list">
-    </ul>
+<!--<div class="row">
+  <div class="span6">
+    <label class="" for="image_url">Image URL</label>
+    <input type="text" class="span6"id="image_url">
+    <label class="" for="item_url">Item URL</label>
+    <input type="text" class="span6" id="item_url">
+    <button class="btn btn-primary" id="update_url" type="button">Apply URL Changes</button>
   </div>
 </div>
-<form class="form-inline">
-  <label class="" for="image_url">Image URL</label>
-  <input type="text" class="input-xxlarge"id="image_url">
-  <button class="btn" id="update_url" type="button">Update</button>
-</form>
+-->

@@ -26,7 +26,6 @@ module Parse
 
   def search_column(file, query, column)
     cmd = "awk '$1==\"#{query}\" {print NR,$0}' #{file}"
-    puts cmd
     result = %x[#{cmd}]
   end
 
@@ -88,13 +87,13 @@ module Parse
     
     arr.push({
       :line => search_data[1],
-      :file => search_data[0],
-      :type => "item_item",
       :item_A => row_data[0], 
       :item_B => row_data[1], 
       :weight => row_data[2], 
       :raw_weight => row_data[3], 
-      :rank => row_data[4]
+      :rank => row_data[4],
+      :type => "item_item",
+      :file => search_data[0],
     }) 
   end
 
@@ -105,16 +104,26 @@ module Parse
   def parse_user_item(row_data, search_data, arr)
     arr.push({
       :line => search_data[1],
-      :file => search_data[0],
-      :type => "user_item",
       :user => row_data[0],
       :item => row_data[1],
       :weight => row_data[2],
       :reason_item => row_data[3],  
       :user_reason_item_weight => row_data[4],  
       :item_reason_item_weight => row_data[5],  
-      :rank => row_data[6]  
+      :rank => row_data[6],
+      :type => "user_item",
+      :file => search_data[0]
     })
+  end
+
+  def parse_generic_item(row_data, search_data, arr)
+    arr.push({
+      :line => search_data[1],
+      :file => search_data[0],
+      :type => "generic_item"
+      
+    })
+      
   end
   
 

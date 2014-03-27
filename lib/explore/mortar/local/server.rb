@@ -22,6 +22,10 @@ class Server < Sinatra::Base
     @search_template = File.read(settings.resource_locations["search"]).to_s
     @browse_template = File.read(settings.resource_locations["browse"]).to_s
     @detail_template = File.read(settings.resource_locations["detail"]).to_s
+    if settings.mode == "recsys"
+      @image_url = settings.image_url.to_s
+      @item_url = settings.item_url.to_s
+    end
     erb File.read(settings.resource_locations["index"]).to_s
   end
 

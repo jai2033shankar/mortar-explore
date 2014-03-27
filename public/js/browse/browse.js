@@ -7,7 +7,7 @@
       page_limit: get_browse_by(),
       next_callback : fire_next_page,
       previous_callback : fire_previous_page,
-      clickable_column: 3
+      clickable_column: 1
     });
     $('#browse_update').click(fire_browse_update);  
     get_browse();

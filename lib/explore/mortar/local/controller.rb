@@ -32,6 +32,11 @@ class Mortar::Local::Controller
     Server.set :searcher, Local::Search.new(data_directory)
     Server.set :browser, Local::Browse.new(data_directory)
     Server.set :recommender, recsys ? Local::Recommend.new(data_directory) : nil
+    if recsys
+      image_url, item_url =  explorer.get_config
+      Server.set :image_url, image_url
+      Server.set :item_url, item_url
+    end
     begin
       server = Thin::Server.new(Server, '0.0.0.0', port, :signals => false)
     rescue => e
@@ -66,6 +71,7 @@ class Mortar::Local::Controller
 
     # Startup Web Server
   end
+
 
   def download_from_bucket(s3_path, output_directory)
         
