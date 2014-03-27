@@ -23,7 +23,7 @@
                     item,
                     {
                       page_limit : 50,
-                      clickable_column: 1
+                      clickable_column: MODE == 'recsys'? 1: null
                     }
                   ));
           }

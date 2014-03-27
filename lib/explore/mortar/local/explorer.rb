@@ -37,5 +37,11 @@ class Mortar::Local::Explorer
         ['', '']
       end
     end
+
+    def set_config(image_url, item_url)
+      f = File.open(CONFIG_FILE, 'w')
+      f.write("image_url ~> #{image_url}\nitem_url ~> #{item_url}")
+      f.close()
+    end
 	
 end

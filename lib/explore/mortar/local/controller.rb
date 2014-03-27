@@ -32,6 +32,7 @@ class Mortar::Local::Controller
     Server.set :searcher, Local::Search.new(data_directory)
     Server.set :browser, Local::Browse.new(data_directory)
     Server.set :recommender, recsys ? Local::Recommend.new(data_directory) : nil
+    Server.set :explorer, explorer
     if recsys
       image_url, item_url =  explorer.get_config
       Server.set :image_url, image_url

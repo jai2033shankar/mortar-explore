@@ -18,12 +18,7 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     $('#update_url').click(fire_update_url);
   };
 
-  function fire_update_url(){
-    set_img_src('#item_img', generate_item_img_src()); 
-    set_item_src();
-  };
-
-  /*
+    /*
    * Api call to get recommendations for specific query
    */
   function get_recommend(){
@@ -45,8 +40,26 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
   };
 
   function set_item_src(){
-    $('#item_link').attr('href', get_item_url().replace('#{id}', get_query()));
+    var item_url = get_item_url().replace('#{id}', get_query());
+    $('#item_link').attr('href', item_url);
+    $('#item_link_text').text(item_url);
+    return item_url;
   };  
+
+  function set_img_src(item_id, item_img_src){
+    IMAGE_URL = get_img_url();
+    ITEM_URL = get_item_url();
+    $(item_id).attr('src',item_img_src); 
+    $('#item_id_text').text(get_query());
+    $('#recommendation_list img').each(function(index, item){
+      var item_id = $(item).attr('data');
+      $(item).attr('src', generate_img_url(item_id)); 
+    
+    });
+    $('#image_link_text').text(item_img_src);
+    return item_img_src;
+  };
+
 
   /*
    * sets image url text box
@@ -71,19 +84,7 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     return get_img_url().replace('#{id}', get_query());
   };
 
-  function set_img_src(item_id, item_img_src){
-    IMAGE_URL = get_img_url();
-    ITEM_URL = get_item_url();
-    $(item_id).attr('src',item_img_src); 
-    $('#item_id').text(get_query());
-    $('#recommendation_list img').each(function(index, item){
-      var item_id = $(item).attr('data');
-      $(item).attr('src', generate_img_url(item_id)); 
-    
-    });
-  };
-
-  /*
+   /*
    * Url getters
    */
   function get_query(){
@@ -113,6 +114,17 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
 
   function fire_detail_error(error_message){
   };
+ 
+  /*
+   * Handler for clicking update button
+   */ 
+  function fire_update_url(){
+    var image_url = set_img_src('#item_img', generate_item_img_src()); 
+    var item_url = set_item_src();
+    debugger;
+    $.mortar_data.api.put_url_config(get_img_url(), get_item_url());
+  };
+
 
   function generate_recommendation_list(recommendations){
     $('#recommendation_list').empty();
@@ -125,8 +137,8 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
             '<a class="thumbnail"  href="'+ get_base_hash() + '/'+ item.item_B + '">'+
               '<img class="img-polaroid recommendation_image" src="' + get_img_url().replace('#{id}', item.item_B)+'" data="'+ item.item_B + '"></img>'+
             '</a>' +
-            //'<a href="' + get_item_url().replace('#{id}', item.item_B) + '">To Item Page</a>'+
             '<h2 class="center">Rank: ' + item.rank + '</h2>' +
+            '<a class="center" target="_blank"  href="' + get_item_url().replace('#{id}', item.item_B) + '">To Item Page</a>'+
           '</div>'+
         '</li>'
       );

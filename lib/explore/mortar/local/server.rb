@@ -36,7 +36,6 @@ class Server < Sinatra::Base
     query = params[:query] 
     searcher = settings.searcher 
     print '\nsearching...'
-    print params
     if searcher == nil
       body {{:error => 'Cannot search in this mode.'}.to_json}
     elsif query != nil and query != "" 
@@ -50,7 +49,6 @@ class Server < Sinatra::Base
   get '/api/v1/browse' do
     print '\nbrowsing...'
     browser = settings.browser 
-    print params
     params[:quantity] == nil ? quantity = 10 : quantity = params[:quantity].to_i 
     params[:index] == nil ? index = browser.index : index = params[:index].to_i
     params[:directory] == nil or params[:directory] == "" ? directory = "" : directory = params[:directory] 
@@ -59,7 +57,6 @@ class Server < Sinatra::Base
 
   get '/api/v1/recommend' do
     item_a = params[:query]
-    print item_a
     directory = (params[:directory] == nil or params[:directory] == "") ?  nil : params[:directory] 
     recommender  = settings.recommender
     if recommender == nil
@@ -69,6 +66,14 @@ class Server < Sinatra::Base
     else
       body { recommender.get_recommendations(item_a, directory).to_json}
     end
+  end
+
+
+  put '/api/v1/config' do
+    image_url = (params[:image_url] == nil or params[:image_url] == "") ?  nil : params[:image_url]
+    item_url = (params[:item_url] == nil or params[:item_url] == "") ?  nil : params[:item_url]
+    
+    settings.explorer.set_config image_url, item_url
   end
 
 

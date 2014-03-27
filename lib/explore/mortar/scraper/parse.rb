@@ -72,6 +72,8 @@ module Parse
           parse_item_item(row_data, search_data, results[:item_item_recs])
         elsif row_data.length == UI_COUNT
           parse_user_item(row_data, search_data, results[:user_item_recs])
+        #else
+        #  parse_generic_item(search_data[2], search_data, results[:generic_item])
         end
       rescue
       end

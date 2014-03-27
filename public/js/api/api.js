@@ -42,3 +42,18 @@ $.mortar_data.api.get_recommend = function(query, directory, success_callback, e
     error: error_callback
   });
 };
+
+
+$.mortar_data.api.put_url_config = function(image_url, item_url){
+  var params = {
+    image_url: image_url,
+    item_url: item_url 
+  };
+
+  $.ajax({
+    url: '/api/v1/config',
+    data: params,
+    type: 'PUT' 
+  });
+
+};
