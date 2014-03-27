@@ -44,7 +44,7 @@ module Local
 
     def browse_from_directory(quantity, start_index, directory_or_file)
       directory_or_file = directory_or_file == nil ?  @base_directory : @base_directory + "/" + directory_or_file
-      file = find_file (directory_or_file)
+      file = find_file(directory_or_file)
       if file != nil 
         raw_browsed = Array.new
         cmd = "sed -n '#{start_index},#{start_index+quantity-1}p' #{file}" 
