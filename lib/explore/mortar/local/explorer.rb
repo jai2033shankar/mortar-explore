@@ -34,14 +34,23 @@ class Mortar::Local::Explorer
       if File.exists? CONFIG_FILE
         image_url, item_url = File.open(CONFIG_FILE, 'r').read().split("\n").collect { |x| x.split('~>')[1].strip}
       else
-        ['', '']
+        image_url  = ask "Please set the Image URL where \#{id} will act as the identifier for item ID: "
+        item_url  = ask "Please set the Item URL where \#{id} will act as the identifier for item ID: "
+        set_config(image_url, item_url)
+        return image_url, item_url 
       end
     end
+
 
     def set_config(image_url, item_url)
       f = File.open(CONFIG_FILE, 'w')
       f.write("image_url ~> #{image_url}\nitem_url ~> #{item_url}")
       f.close()
+    end
+
+    def ask(prompt)
+       print prompt
+       $stdin.gets.to_s.strip
     end
 	
 end
