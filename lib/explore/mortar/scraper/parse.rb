@@ -24,8 +24,9 @@ module Parse
     result = %x[#{cmd}]
   end
 
-  def search_column(file, query, column)
-    cmd = "awk '$1==\"#{query}\" {print NR,$0}' #{file}"
+  def search_column(file, query, column, delim_char)
+    cmd = "awk -F '#{delim_char}' '$1==\"#{query}\" {print NR,$0}' #{file}"
+    print cmd
     result = %x[#{cmd}]
   end
 

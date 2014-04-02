@@ -13,7 +13,6 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     set_img_url(IMAGE_URL);
     set_item_url(ITEM_URL);
     set_img_src('#item_img', generate_item_img_src());
-    set_item_src();
     set_breadcrumbs();
     $('#update_url').click(fire_update_url);
   };
@@ -49,11 +48,11 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
   function set_img_src(item_id, item_img_src){
     IMAGE_URL = get_img_url();
     ITEM_URL = get_item_url();
-    $(item_id).attr('src',item_img_src); 
+    $(item_id).attr('src',item_img_src.replace(' ', '-')); 
     $('#item_id_text').text(get_query());
     $('#recommendation_list img').each(function(index, item){
       var item_id = $(item).attr('data');
-      $(item).attr('src', generate_img_url(item_id)); 
+      $(item).attr('src', generate_img_url(item_id).replace(' ', '-')); 
     
     });
     $('#image_link_text').text(item_img_src);
@@ -131,6 +130,7 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     for(var i=0; i < recommendations.length; i++){
       var item = recommendations[i]; 
       var span_size = 2;// relative to span12 on bootstrap
+      debugger;
       $('#recommendation_list').append(
         '<li class="span' + span_size + '">' + 
           '<div class="well">' + 
