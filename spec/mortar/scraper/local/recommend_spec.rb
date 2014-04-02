@@ -18,13 +18,10 @@ module Local
 
     describe "recommend" do
       it "returns the items for a given recommendation" do
-        results = {
-          :item_item_recs => get_all_item_item[0..4],
-          :user_item_recs => [],
-          :location => "item_item_recs",
-          :error => nil
-        }
-        rec.get_recommendations('big', 'item_item_recs').should eq(results)
+        results = rec.get_recommendations('big', 'item_item_recs')
+        results[:generic_item].length.should eq(5)
+        results[:error].should eq(nil)
+        results[:location].should eq("item_item_recs")
       end
     end
   end

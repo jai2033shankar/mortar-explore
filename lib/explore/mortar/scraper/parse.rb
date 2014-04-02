@@ -26,7 +26,6 @@ module Parse
 
   def search_column(file, query, column, delim_char)
     cmd = "awk -F '#{delim_char}' '$1==\"#{query}\" {print NR,$0}' #{file}"
-    print cmd
     result = %x[#{cmd}]
   end
 
@@ -59,26 +58,29 @@ module Parse
   #           FILE_PATH:LINE_NUMBER:Line_DATA
   #           *NOTE the ':' character is used to seperate the fields
   #           this fails if a directory name has ':' in it
-  def parse_results(input_array, error= nil)
+  def parse_results(input_array, error= nil, mode="local")
     results = {
-      :item_item_recs => Array.new,
-      :user_item_recs => Array.new,
+      #:item_item_recs => Array.new,
+      :generic_item => Array.new,
+      #:user_item_recs => Array.new,
       :error => error 
     }
     input_array.each do |row|
       begin
         search_data = row.split(':', 3)
         row_data = search_data[2].split(delim_char).map(&:strip)
-        if row_data.length == II_COUNT  
-          parse_item_item(row_data, search_data, results[:item_item_recs])
-        elsif row_data.length == UI_COUNT
-          parse_user_item(row_data, search_data, results[:user_item_recs])
-        #else
-        #  parse_generic_item(search_data[2], search_data, results[:generic_item])
-        end
+        parse_generic_item(row_data, search_data, results[:generic_item])
+      #  if row_data.length == II_COUNT  
+      #    parse_item_item(row_data, search_data, results[:item_item_recs])
+      #  elsif row_data.length == UI_COUNT
+      #    parse_user_item(row_data, search_data, results[:user_item_recs])
+      #  else
+      #    parse_generic_item(search_data[2], search_data, results[:generic_item])
+      #  end
       rescue
       end
     end 
+    print results
     return results 
   end
   
@@ -120,13 +122,17 @@ module Parse
   end
 
   def parse_generic_item(row_data, search_data, arr)
-    arr.push({
-      :line => search_data[1],
-      :file => search_data[0],
-      :type => "generic_item"
-      
-    })
-      
+    hash = {} 
+    hash["line"] = search_data[1]
+    i = 1
+    for item in row_data
+      col_name = "column#{i.to_s}"
+      hash[col_name] = item
+      i += 1
+    end
+    hash["file"] = search_data[0] 
+    print hash
+    arr.push(hash)
   end
   
 
