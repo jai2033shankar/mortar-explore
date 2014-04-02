@@ -1,5 +1,4 @@
 require "explore/mortar/scraper/local/browse"
-require 'ruby-debug'
 
 module Local
   describe Browse do
