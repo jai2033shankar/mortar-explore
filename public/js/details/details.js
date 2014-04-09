@@ -6,8 +6,9 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
 (function () {
   $.mortar_data.details_view.init = function(){
     init_details();
-    
   }; 
+  
+  var recommendation_data = [];
   function init_details(){
     get_recommend(); 
     set_img_url(IMAGE_URL);
@@ -15,6 +16,10 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     set_img_src('#item_img', generate_item_img_src());
     set_breadcrumbs();
     $('#update_url').click(fire_update_url);
+    var that = this;
+    $('select').change(function(){
+      fire_select_change(recommendation_data); 
+    });
   };
 
     /*
@@ -35,7 +40,6 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     base = base.substr(1, base.length);
     $('#detail_base').append('<a href="' + get_base_hash() + '">' + $.mortar_data.util.capitalize_first_letter(base) + '</a>'); 
     $('#detail_id').text(get_query());
-
   };
 
   function set_item_src(){
@@ -71,6 +75,22 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     $('#item_url').val(url);
   };
 
+  function set_item_select(val){
+    set_select('#item_select', val); 
+  };
+
+  function set_recommendation_select(val){
+    set_select('#recommendation_select', val); 
+  };
+  
+  function set_rank_select(val){
+    set_select('#rank_select', val); 
+  };
+
+  function set_select(select_id, val){
+    $(select_id).val(val); 
+  };
+
   function get_img_url(){
     return $('#image_url').val();
   };
@@ -78,9 +98,25 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
   function get_item_url(){
     return $('#item_url').val();
   };
+
+  function get_rank_select(){
+    return get_select_val('#rank_select'); 
+  };
+  
+  function get_recommendation_select(){
+    return get_select_val('#recommendation_select'); 
+  };
+
+  function get_item_select(){
+    return get_select_val('#item_select'); 
+  };
   
   function generate_item_img_src(){
     return get_img_url().replace('#{id}', get_query());
+  };
+
+  function get_select_val(select_id){
+    return $(select_id).val();
   };
 
    /*
@@ -101,17 +137,32 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
   };
 
 
-
   /*
   * Event Handlers
   */
   function fire_show_details(data){
-    var data = JSON.parse(data);
-    generate_recommendation_list(data.item_item_recs);
-    console.log(data);
+    data = JSON.parse(data);
+    data = $.mortar_data.util.get_largest_array(data)
+    generate_col_selector_options('#item_select', data);
+    generate_col_selector_options('#recommendation_select', data);
+    generate_col_selector_options('#rank_select', data);
+    recommendation_data = data;
+    set_item_select(ITEM_KEY);
+    set_recommendation_select(RECOMMENDATION_KEY);
+    set_rank_select(RANK_KEY);
+    generate_recommendation_list(data);
+    
   };
 
   function fire_detail_error(error_message){
+  };
+
+  function fire_select_change(data){
+    ITEM_KEY = get_item_select();
+    RECOMMENDATION_KEY = get_recommendation_select();
+    RANK_KEY = get_rank_select();
+    put_url_config();
+    generate_recommendation_list(data) ;
   };
  
   /*
@@ -120,29 +171,48 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
   function fire_update_url(){
     var image_url = set_img_src('#item_img', generate_item_img_src()); 
     var item_url = set_item_src();
-    debugger;
-    $.mortar_data.api.put_url_config(get_img_url(), get_item_url());
+    put_url_config();
+  };
+
+
+  function put_url_config(){
+    $.mortar_data.api.put_url_config({
+      image_url : get_img_url(),
+      item_url : get_item_url(),
+      item_key : get_item_select(),
+      recommendation_key : get_recommendation_select(),
+      rank_key : get_rank_select()
+    });
+  };
+
+  function generate_col_selector_options(selector_id, recommendations){
+    $(selector_id).empty();
+    for (key in recommendations[0]){
+      if (key.search('column') == 0)  {
+        $(selector_id).append('<option>' + key + '</option>');
+      }
+    }
   };
 
 
   function generate_recommendation_list(recommendations){
     $('#recommendation_list').empty();
-    for(var i=0; i < recommendations.length; i++){
+    for (var i=0; i < recommendations.length; i++){
       var item = recommendations[i]; 
       var span_size = 2;// relative to span12 on bootstrap
-      debugger;
+      var rec_id = item[get_recommendation_select()];
+      var rank = item[get_rank_select()];
       $('#recommendation_list').append(
         '<li class="span' + span_size + '">' + 
           '<div class="well">' + 
-            '<a class="thumbnail"  href="'+ get_base_hash() + '/'+ item.item_B + '">'+
-              '<img class="img-polaroid recommendation_image" src="' + get_img_url().replace('#{id}', item.item_B)+'" data="'+ item.item_B + '"></img>'+
+            '<a class="thumbnail" href="'+ get_base_hash() + '/'+ rec_id + '">'+
+              '<img class="img-polaroid recommendation_image" src="' + get_img_url().replace('#{id}', rec_id)+'" data="'+ rec_id + '"></img>'+
             '</a>' +
-            '<h2 class="center">Rank: ' + item.rank + '</h2>' +
-            '<a class="center" target="_blank"  href="' + get_item_url().replace('#{id}', item.item_B) + '">To Item Page</a>'+
+            '<h2 class="center">Rank: ' + rank + '</h2>' +
+            '<a class="center" target="_blank"  href="' + get_item_url().replace('#{id}', rec_id) + '">To Item Page</a>'+
           '</div>'+
         '</li>'
       );
-
     };
   };
 

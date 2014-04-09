@@ -24,6 +24,11 @@ module Parse
     result = %x[#{cmd}]
   end
 
+  def get_lines_in_file(start_line, end_line, file)
+    cmd = "sed -n '#{start_line},#{end_line}p' #{file}" 
+    result = %x[#{cmd}]
+  end
+
   def search_column(file, query, column, delim_char)
     cmd = "awk -F '#{delim_char}' '$1==\"#{query}\" {print NR,$0}' #{file}"
     result = %x[#{cmd}]
@@ -80,7 +85,6 @@ module Parse
       rescue
       end
     end 
-    print results
     return results 
   end
   
@@ -131,7 +135,6 @@ module Parse
       i += 1
     end
     hash["file"] = search_data[0] 
-    print hash
     arr.push(hash)
   end
   

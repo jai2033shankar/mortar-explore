@@ -7,7 +7,7 @@
       page_limit: get_browse_by(),
       next_callback : fire_next_page,
       previous_callback : fire_previous_page,
-      clickable_column: MODE == 'recsys'? 1: null
+      detail_button: MODE == 'recsys'? 2: null
     });
     $('#browse_update').click(fire_browse_update);  
     get_browse();
@@ -42,19 +42,7 @@
     // server returned no error
     if(data_parsed.error == null){
       $('#browse_error_row').addClass('hidden');
-      var largest_array = []; //only one array will have content, so pick the largest
-      var count = 0;
-      for(key in data_parsed){
-        if(data_parsed[key] instanceof Array){
-          var curr_array = data_parsed[key];
-          // biggest array
-          if(curr_array.length > count){
-            count  = curr_array.length;
-            largest_array = curr_array;
-          }
-        }
-      }
-      debugger;
+      var largest_array = $.mortar_data.util.get_largest_array(data_parsed); //only one array will have content, so pick the largest
       //current_index += largest_array.length; //update current index
       if(largest_array.length > 0){
         current_index = ( Math.floor(current_index/get_browse_by() ) + 1 ) * 50 + 1;

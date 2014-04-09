@@ -21,17 +21,6 @@ module Mortar::Command
 STDOUT
       end
     end
-
-    context("voyage") do
-      it "shows appropriate error message" do
-        stderr, stdout = execute("voyage")
-        stderr.should == <<-STDOUT
- !    Usage: mortar voyage S3_BUCKET
- !    Must specify bucket.
-STDOUT
-      end
-
-    end
   
   end
 end
