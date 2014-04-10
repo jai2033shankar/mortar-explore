@@ -13,9 +13,9 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     get_recommend(); 
     set_img_url(IMAGE_URL);
     set_item_url(ITEM_URL);
-    set_img_src('#item_img', generate_item_img_src());
     set_breadcrumbs();
     $('#update_url').click(fire_update_url);
+    //set_img_src('#item_img', generate_item_img_src());
     var that = this;
     $('select').change(function(){
       fire_select_change(recommendation_data); 
@@ -43,17 +43,21 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
   };
 
   function set_item_src(){
-    var item_url = get_item_url().replace('#{id}', get_query());
+    var query = recommendation_data.length ? recommendation_data[0][get_item_select()] : get_query();
+    var item_url = get_item_url().replace('#{id}', query);
     $('#item_link').attr('href', item_url);
     $('#item_link_text').text(item_url);
     return item_url;
   };  
 
   function set_img_src(item_id, item_img_src){
+    var item_id = '#item_img';
+    var item_img_src = generate_item_img_src();
+    var query = recommendation_data.length ? recommendation_data[0][get_item_select()] : get_query();
     IMAGE_URL = get_img_url();
     ITEM_URL = get_item_url();
     $(item_id).attr('src',item_img_src.replace(' ', '-')); 
-    $('#item_id_text').text(get_query());
+    $('#item_id_text').text(query);
     $('#recommendation_list img').each(function(index, item){
       var item_id = $(item).attr('data');
       $(item).attr('src', generate_img_url(item_id).replace(' ', '-')); 
@@ -72,55 +76,24 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
   };
 
   function set_item_url(url){
-    $('#item_url').val(url);
+    $('#itegm_url').val(url);
   };
 
   function set_item_select(val){
-    set_select('#item_select', val); 
+    $('#item_select').val(val); 
   };
 
   function set_recommendation_select(val){
-    set_select('#recommendation_select', val); 
+    $('#recommendation_select').val(val); 
   };
   
   function set_rank_select(val){
-    set_select('#rank_select', val); 
+    $('#rank_select').val(val);
   };
 
-  function set_select(select_id, val){
-    $(select_id).val(val); 
-  };
 
-  function get_img_url(){
-    return $('#image_url').val();
-  };
-
-  function get_item_url(){
-    return $('#item_url').val();
-  };
-
-  function get_rank_select(){
-    return get_select_val('#rank_select'); 
-  };
-  
-  function get_recommendation_select(){
-    return get_select_val('#recommendation_select'); 
-  };
-
-  function get_item_select(){
-    return get_select_val('#item_select'); 
-  };
-  
-  function generate_item_img_src(){
-    return get_img_url().replace('#{id}', get_query());
-  };
-
-  function get_select_val(select_id){
-    return $(select_id).val();
-  };
-
-   /*
-   * Url getters
+  /*
+   * getters
    */
   function get_query(){
     var hash = window.location.hash;
@@ -132,8 +105,37 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     return hash.substr(0, hash.search('/'));
   };
 
+
+  function get_img_url(){
+    return $('#image_url').val();
+  };
+
+  function get_item_url(){
+    return $('#item_url').val();
+  };
+
+  function get_rank_select(){
+    return $('#rank_select').val();
+  };
+  
+  function get_recommendation_select(){
+    return $('#recommendation_select').val();
+  };
+
+  function get_item_select(){
+    return $('#item_select').val();
+  };
+
+  /*
+   * Url Generators
+   */
   function generate_img_url(id){
     return get_img_url().replace('#{id}', id);
+  };
+
+  function generate_item_img_src(){
+    var query = recommendation_data.length ? recommendation_data[0][get_item_select()] : get_query();
+    return get_img_url().replace('#{id}', query);
   };
 
 
@@ -151,6 +153,8 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     set_recommendation_select(RECOMMENDATION_KEY);
     set_rank_select(RANK_KEY);
     generate_recommendation_list(data);
+    //set_img_src('#item_img', generate_item_img_src());
+    set_img_src();
     
   };
 
@@ -163,14 +167,17 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     RANK_KEY = get_rank_select();
     put_url_config();
     generate_recommendation_list(data) ;
+    //set_img_src('#item_img', generate_item_img_src());
+    set_img_src();
   };
  
   /*
    * Handler for clicking update button
    */ 
   function fire_update_url(){
-    var image_url = set_img_src('#item_img', generate_item_img_src()); 
-    var item_url = set_item_src();
+    // = set_img_src('#item_img', generate_item_img_src()); 
+    set_img_src();
+    set_item_src();
     put_url_config();
   };
 

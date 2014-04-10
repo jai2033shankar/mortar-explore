@@ -77,9 +77,6 @@ class Mortar::Local::Controller
   end
 
 
-  def download_from_bucket(s3_path, output_directory)
-        
-  end
 
   private
 

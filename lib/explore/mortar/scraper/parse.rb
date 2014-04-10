@@ -40,7 +40,9 @@ module Parse
       all_contents = Dir.entries(directory_or_file)
       contents = Array.new
       for item in all_contents do
-        if File.exists?(directory_or_file +"/" +  item)
+        relative_path = "#{directory_or_file}/#{item}"
+
+        if File.exists?(relative_path) && ! File.directory?(relative_path)
           # TODO -- sort and use real file names
           if (item[0,1] != "." and item[0,1] != "_")
             contents.push(item)
