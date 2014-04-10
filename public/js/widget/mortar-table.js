@@ -134,7 +134,7 @@ MortarTable.prototype.draw_body_content = function(){
     $table_row = $('#' + this.table_body_id + ' tr:last');
     if(this.detail_button){
       var link = row['column' + this.detail_button];
-      $table_row.append('<td>' + 
+      $table_row.append('<td class="flat-cell">' + 
           '<a class="btn btn-cell btn-primary" href="'+window.location.hash + '/' + link + '">Details</a></td>'
         ); 
     }

@@ -2,9 +2,9 @@ $.mortar_data = $.mortar_data || {};
 $.mortar_data.details_view = $.mortar_data.details_view || {};
 
 
-
 (function () {
   $.mortar_data.details_view.init = function(){
+    $('i').tooltip();
     init_details();
   }; 
   
@@ -16,7 +16,6 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     set_breadcrumbs();
     $('#update_url').click(fire_update_url);
     //set_img_src('#item_img', generate_item_img_src());
-    var that = this;
     $('select').change(function(){
       fire_select_change(recommendation_data); 
     });

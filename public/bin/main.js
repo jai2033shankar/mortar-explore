@@ -171,9 +171,9 @@ $.mortar_data = $.mortar_data || {};
 $.mortar_data.details_view = $.mortar_data.details_view || {};
 
 
-
 (function () {
   $.mortar_data.details_view.init = function(){
+    $('i').tooltip();
     init_details();
   }; 
   
@@ -185,7 +185,6 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     set_breadcrumbs();
     $('#update_url').click(fire_update_url);
     //set_img_src('#item_img', generate_item_img_src());
-    var that = this;
     $('select').change(function(){
       fire_select_change(recommendation_data); 
     });
@@ -662,7 +661,7 @@ MortarTable.prototype.draw_body_content = function(){
     $table_row = $('#' + this.table_body_id + ' tr:last');
     if(this.detail_button){
       var link = row['column' + this.detail_button];
-      $table_row.append('<td>' + 
+      $table_row.append('<td class="flat-cell">' + 
           '<a class="btn btn-cell btn-primary" href="'+window.location.hash + '/' + link + '">Details</a></td>'
         ); 
     }
