@@ -2,19 +2,22 @@
 <html>
   <head>
     <title>Mortar - Explore</title>
-    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="stylesheet" type="text/css" href="css/base.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="libs/jquery-1.11.0.min.js"></script>
     <!--<script src="libs/jquery.tablesorter.min.js"></script>-->
       <script type="text/javascript">
+        var MODE = "<%= settings.mode %>" || ''
 
         <% if settings.mode == "recsys" %>
           var IMAGE_URL = "<%= settings.image_url %>";
           var ITEM_URL = "<%= settings.item_url %>";
+          var ITEM_KEY = "<%= settings.item_key %>";
+          var RECOMMENDATION_KEY = "<%= settings.recommendation_key %>";
+          var RANK_KEY = "<%= settings.rank_key %>";
         <% end %>
 
-        var MODE = "<%= settings.mode %>"
       </script>
   </head>
   <body>

@@ -44,11 +44,7 @@ $.mortar_data.api.get_recommend = function(query, directory, success_callback, e
 };
 
 
-$.mortar_data.api.put_url_config = function(image_url, item_url){
-  var params = {
-    image_url: image_url,
-    item_url: item_url 
-  };
+$.mortar_data.api.put_url_config = function(params){
 
   $.ajax({
     url: '/api/v1/config',

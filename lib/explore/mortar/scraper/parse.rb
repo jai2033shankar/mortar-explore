@@ -24,9 +24,13 @@ module Parse
     result = %x[#{cmd}]
   end
 
+  def get_lines_in_file(start_line, end_line, file)
+    cmd = "sed -n '#{start_line},#{end_line}p' #{file}" 
+    result = %x[#{cmd}]
+  end
+
   def search_column(file, query, column, delim_char)
     cmd = "awk -F '#{delim_char}' '$1==\"#{query}\" {print NR,$0}' #{file}"
-    print cmd
     result = %x[#{cmd}]
   end
 
@@ -36,7 +40,9 @@ module Parse
       all_contents = Dir.entries(directory_or_file)
       contents = Array.new
       for item in all_contents do
-        if File.exists?(directory_or_file +"/" +  item)
+        relative_path = "#{directory_or_file}/#{item}"
+
+        if File.exists?(relative_path) && ! File.directory?(relative_path)
           # TODO -- sort and use real file names
           if (item[0,1] != "." and item[0,1] != "_")
             contents.push(item)
@@ -59,23 +65,25 @@ module Parse
   #           FILE_PATH:LINE_NUMBER:Line_DATA
   #           *NOTE the ':' character is used to seperate the fields
   #           this fails if a directory name has ':' in it
-  def parse_results(input_array, error= nil)
+  def parse_results(input_array, error= nil, mode="local")
     results = {
-      :item_item_recs => Array.new,
-      :user_item_recs => Array.new,
+      #:item_item_recs => Array.new,
+      :generic_item => Array.new,
+      #:user_item_recs => Array.new,
       :error => error 
     }
     input_array.each do |row|
       begin
         search_data = row.split(':', 3)
         row_data = search_data[2].split(delim_char).map(&:strip)
-        if row_data.length == II_COUNT  
-          parse_item_item(row_data, search_data, results[:item_item_recs])
-        elsif row_data.length == UI_COUNT
-          parse_user_item(row_data, search_data, results[:user_item_recs])
-        #else
-        #  parse_generic_item(search_data[2], search_data, results[:generic_item])
-        end
+        parse_generic_item(row_data, search_data, results[:generic_item])
+      #  if row_data.length == II_COUNT  
+      #    parse_item_item(row_data, search_data, results[:item_item_recs])
+      #  elsif row_data.length == UI_COUNT
+      #    parse_user_item(row_data, search_data, results[:user_item_recs])
+      #  else
+      #    parse_generic_item(search_data[2], search_data, results[:generic_item])
+      #  end
       rescue
       end
     end 
@@ -120,13 +128,16 @@ module Parse
   end
 
   def parse_generic_item(row_data, search_data, arr)
-    arr.push({
-      :line => search_data[1],
-      :file => search_data[0],
-      :type => "generic_item"
-      
-    })
-      
+    hash = {} 
+    hash["line"] = search_data[1]
+    i = 1
+    for item in row_data
+      col_name = "column#{i.to_s}"
+      hash[col_name] = item
+      i += 1
+    end
+    hash["file"] = search_data[0] 
+    arr.push(hash)
   end
   
 

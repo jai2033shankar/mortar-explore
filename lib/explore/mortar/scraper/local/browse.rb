@@ -2,7 +2,6 @@
 # Copyright 2014 Mortar Data Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
@@ -47,8 +46,7 @@ module Local
       file = find_file(directory_or_file)
       if file != nil 
         raw_browsed = Array.new
-        cmd = "sed -n '#{start_index},#{start_index+quantity-1}p' #{file}" 
-        result = %x[#{cmd}]
+        result = get_lines_in_file(start_index, start_index + quantity-1, file)
         i = start_index 
         for row in result.split("\n") do
           raw_browsed.push( file + ":" + i.to_s + ":" + row ) 

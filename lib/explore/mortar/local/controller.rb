@@ -34,9 +34,12 @@ class Mortar::Local::Controller
     Server.set :recommender, recsys ? Local::Recommend.new(data_directory) : nil
     Server.set :explorer, explorer
     if recsys
-      image_url, item_url =  explorer.get_config
+      image_url, item_url, item_key, recommendation_key, rank_key  =  explorer.get_config
       Server.set :image_url, image_url
       Server.set :item_url, item_url
+      Server.set :item_key, item_key 
+      Server.set :recommendation_key, recommendation_key 
+      Server.set :rank_key, rank_key 
     end
     begin
       server = Thin::Server.new(Server, '0.0.0.0', port, :signals => false)
@@ -74,9 +77,6 @@ class Mortar::Local::Controller
   end
 
 
-  def download_from_bucket(s3_path, output_directory)
-        
-  end
 
   private
 

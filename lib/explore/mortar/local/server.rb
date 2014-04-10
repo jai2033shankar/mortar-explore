@@ -70,10 +70,18 @@ class Server < Sinatra::Base
 
 
   put '/api/v1/config' do
-    image_url = (params[:image_url] == nil or params[:image_url] == "") ?  nil : params[:image_url]
-    item_url = (params[:item_url] == nil or params[:item_url] == "") ?  nil : params[:item_url]
-    
-    settings.explorer.set_config image_url, item_url
+    image_url = (params[:image_url] == nil or params[:image_url] == "") ?  settings.image_url : params[:image_url]
+    item_url = (params[:item_url] == nil or params[:item_url] == "") ?  settings.item_url : params[:item_url]
+    item_key = (params[:item_key] == nil or params[:item_key] == "") ?  settings.item_key : params[:item_key]
+    recommendation_key = (params[:recommendation_key] == nil or params[:recommendation_key] == "") ?  settings.recommendation_key : params[:recommendation_key]
+    rank_key = (params[:rank_key] == nil or params[:rank_key] == "") ?  settings.rank_key : params[:rank_key]
+    settings.image_url = image_url
+    settings.item_url = item_url 
+    settings.item_key = item_key
+    settings.recommendation_key = recommendation_key 
+    settings.rank_key = rank_key 
+
+    settings.explorer.set_config image_url, item_url, item_key, recommendation_key, rank_key
   end
 
 

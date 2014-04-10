@@ -19,13 +19,13 @@ include Parse
 describe "generic functions" do
   it "should parse out generic entries" do
     arr = Array.new
-    row_data= []
+    row_data= "hello\twelcome".split("\t")
     search_data = ['my-file', 1]
     Parse.parse_generic_item(row_data, search_data, arr)
     res = arr[0]
-    res[:file].should eq('my-file')
-    res[:line].should eq(1)
-    res[:type].should eq("generic_item")
-    
+    res["file"].should eq('my-file')
+    res["line"].should eq(1)
+    res["column1"].should eq("hello")
+    res["column2"].should eq("welcome")
   end
 end

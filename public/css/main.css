@@ -1,5 +1,7 @@
 
 .center{text-align:center}
+.btn-cell{margin-top:0.1em;font-size:70%;padding-right:4%;padding-left:4%}
+.form-cell{margin-top:0px}
 .hidden{display:none}
 #explore_container{margin-top:1em}
 .recommendation_image{height:6em;width:6em}

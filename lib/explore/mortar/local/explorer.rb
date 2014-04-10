@@ -32,19 +32,18 @@ class Mortar::Local::Explorer
 
     def get_config
       if File.exists? CONFIG_FILE
-        image_url, item_url = File.open(CONFIG_FILE, 'r').read().split("\n").collect { |x| x.split('~>')[1].strip}
-      else
-        image_url  = ask "Please set the Image URL where \#{id} will act as the identifier for item ID: "
-        item_url  = ask "Please set the Item URL where \#{id} will act as the identifier for item ID: "
-        set_config(image_url, item_url)
-        return image_url, item_url 
+        image_url, item_url, item_key, recommendation_key, rank_key = File.open(CONFIG_FILE, 'r').read().split("\n").collect { |x| x.split('~>')[1].strip}
+        print [image_url, item_url, item_key, recommendation_key, rank_key]
+        return image_url, item_url, item_key, recommendation_key, rank_key
       end
     end
 
-
-    def set_config(image_url, item_url)
+    def set_config(image_url, item_url, item_key, recommendation_key, rank_key)
       f = File.open(CONFIG_FILE, 'w')
       f.write("image_url ~> #{image_url}\nitem_url ~> #{item_url}")
+      f.write("\nitem_key ~> #{item_key}")
+      f.write("\nrecommendation_key ~> #{recommendation_key}")
+      f.write("\nrank_key ~> #{rank_key}")
       f.close()
     end
 

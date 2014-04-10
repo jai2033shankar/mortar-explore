@@ -44,11 +44,7 @@ $.mortar_data.api.get_recommend = function(query, directory, success_callback, e
 };
 
 
-$.mortar_data.api.put_url_config = function(image_url, item_url){
-  var params = {
-    image_url: image_url,
-    item_url: item_url 
-  };
+$.mortar_data.api.put_url_config = function(params){
 
   $.ajax({
     url: '/api/v1/config',
@@ -66,7 +62,7 @@ $.mortar_data.api.put_url_config = function(image_url, item_url){
       page_limit: get_browse_by(),
       next_callback : fire_next_page,
       previous_callback : fire_previous_page,
-      clickable_column: MODE == 'recsys'? 1: null
+      detail_button: MODE == 'recsys'? 2: null
     });
     $('#browse_update').click(fire_browse_update);  
     get_browse();
@@ -101,19 +97,7 @@ $.mortar_data.api.put_url_config = function(image_url, item_url){
     // server returned no error
     if(data_parsed.error == null){
       $('#browse_error_row').addClass('hidden');
-      var largest_array = []; //only one array will have content, so pick the largest
-      var count = 0;
-      for(key in data_parsed){
-        if(data_parsed[key] instanceof Array){
-          var curr_array = data_parsed[key];
-          // biggest array
-          if(curr_array.length > count){
-            count  = curr_array.length;
-            largest_array = curr_array;
-          }
-        }
-      }
-      debugger;
+      var largest_array = $.mortar_data.util.get_largest_array(data_parsed); //only one array will have content, so pick the largest
       //current_index += largest_array.length; //update current index
       if(largest_array.length > 0){
         current_index = ( Math.floor(current_index/get_browse_by() ) + 1 ) * 50 + 1;
@@ -191,15 +175,20 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
 (function () {
   $.mortar_data.details_view.init = function(){
     init_details();
-    
   }; 
+  
+  var recommendation_data = [];
   function init_details(){
     get_recommend(); 
     set_img_url(IMAGE_URL);
     set_item_url(ITEM_URL);
-    set_img_src('#item_img', generate_item_img_src());
     set_breadcrumbs();
     $('#update_url').click(fire_update_url);
+    //set_img_src('#item_img', generate_item_img_src());
+    var that = this;
+    $('select').change(function(){
+      fire_select_change(recommendation_data); 
+    });
   };
 
     /*
@@ -220,21 +209,24 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     base = base.substr(1, base.length);
     $('#detail_base').append('<a href="' + get_base_hash() + '">' + $.mortar_data.util.capitalize_first_letter(base) + '</a>'); 
     $('#detail_id').text(get_query());
-
   };
 
   function set_item_src(){
-    var item_url = get_item_url().replace('#{id}', get_query());
+    var query = recommendation_data.length ? recommendation_data[0][get_item_select()] : get_query();
+    var item_url = get_item_url().replace('#{id}', query);
     $('#item_link').attr('href', item_url);
     $('#item_link_text').text(item_url);
     return item_url;
   };  
 
   function set_img_src(item_id, item_img_src){
+    var item_id = '#item_img';
+    var item_img_src = generate_item_img_src();
+    var query = recommendation_data.length ? recommendation_data[0][get_item_select()] : get_query();
     IMAGE_URL = get_img_url();
     ITEM_URL = get_item_url();
     $(item_id).attr('src',item_img_src.replace(' ', '-')); 
-    $('#item_id_text').text(get_query());
+    $('#item_id_text').text(query);
     $('#recommendation_list img').each(function(index, item){
       var item_id = $(item).attr('data');
       $(item).attr('src', generate_img_url(item_id).replace(' ', '-')); 
@@ -253,23 +245,24 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
   };
 
   function set_item_url(url){
-    $('#item_url').val(url);
+    $('#itegm_url').val(url);
   };
 
-  function get_img_url(){
-    return $('#image_url').val();
+  function set_item_select(val){
+    $('#item_select').val(val); 
   };
 
-  function get_item_url(){
-    return $('#item_url').val();
+  function set_recommendation_select(val){
+    $('#recommendation_select').val(val); 
   };
   
-  function generate_item_img_src(){
-    return get_img_url().replace('#{id}', get_query());
+  function set_rank_select(val){
+    $('#rank_select').val(val);
   };
 
-   /*
-   * Url getters
+
+  /*
+   * getters
    */
   function get_query(){
     var hash = window.location.hash;
@@ -281,53 +274,121 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     return hash.substr(0, hash.search('/'));
   };
 
+
+  function get_img_url(){
+    return $('#image_url').val();
+  };
+
+  function get_item_url(){
+    return $('#item_url').val();
+  };
+
+  function get_rank_select(){
+    return $('#rank_select').val();
+  };
+  
+  function get_recommendation_select(){
+    return $('#recommendation_select').val();
+  };
+
+  function get_item_select(){
+    return $('#item_select').val();
+  };
+
+  /*
+   * Url Generators
+   */
   function generate_img_url(id){
     return get_img_url().replace('#{id}', id);
   };
 
+  function generate_item_img_src(){
+    var query = recommendation_data.length ? recommendation_data[0][get_item_select()] : get_query();
+    return get_img_url().replace('#{id}', query);
+  };
 
 
   /*
   * Event Handlers
   */
   function fire_show_details(data){
-    var data = JSON.parse(data);
-    generate_recommendation_list(data.item_item_recs);
-    console.log(data);
+    data = JSON.parse(data);
+    data = $.mortar_data.util.get_largest_array(data)
+    generate_col_selector_options('#item_select', data);
+    generate_col_selector_options('#recommendation_select', data);
+    generate_col_selector_options('#rank_select', data);
+    recommendation_data = data;
+    set_item_select(ITEM_KEY);
+    set_recommendation_select(RECOMMENDATION_KEY);
+    set_rank_select(RANK_KEY);
+    generate_recommendation_list(data);
+    //set_img_src('#item_img', generate_item_img_src());
+    set_img_src();
+    
   };
 
   function fire_detail_error(error_message){
+  };
+
+  function fire_select_change(data){
+    ITEM_KEY = get_item_select();
+    RECOMMENDATION_KEY = get_recommendation_select();
+    RANK_KEY = get_rank_select();
+    put_url_config();
+    generate_recommendation_list(data) ;
+    //set_img_src('#item_img', generate_item_img_src());
+    set_img_src();
   };
  
   /*
    * Handler for clicking update button
    */ 
   function fire_update_url(){
-    var image_url = set_img_src('#item_img', generate_item_img_src()); 
-    var item_url = set_item_src();
-    debugger;
-    $.mortar_data.api.put_url_config(get_img_url(), get_item_url());
+    // = set_img_src('#item_img', generate_item_img_src()); 
+    set_img_src();
+    set_item_src();
+    put_url_config();
+  };
+
+
+  function put_url_config(){
+    $.mortar_data.api.put_url_config({
+      image_url : get_img_url(),
+      item_url : get_item_url(),
+      item_key : get_item_select(),
+      recommendation_key : get_recommendation_select(),
+      rank_key : get_rank_select()
+    });
+  };
+
+  function generate_col_selector_options(selector_id, recommendations){
+    $(selector_id).empty();
+    for (key in recommendations[0]){
+      if (key.search('column') == 0)  {
+        $(selector_id).append('<option>' + key + '</option>');
+      }
+    }
   };
 
 
   function generate_recommendation_list(recommendations){
     $('#recommendation_list').empty();
-    for(var i=0; i < recommendations.length; i++){
+    for (var i=0; i < recommendations.length; i++){
       var item = recommendations[i]; 
       var span_size = 2;// relative to span12 on bootstrap
-      debugger;
+      var rec_id = item[get_recommendation_select()];
+      var rank = item[get_rank_select()];
       $('#recommendation_list').append(
         '<li class="span' + span_size + '">' + 
           '<div class="well">' + 
-            '<a class="thumbnail"  href="'+ get_base_hash() + '/'+ item.item_B + '">'+
-              '<img class="img-polaroid recommendation_image" src="' + get_img_url().replace('#{id}', item.item_B)+'" data="'+ item.item_B + '"></img>'+
+            '<a class="thumbnail" href="'+ get_base_hash() + '/'+ rec_id + '">'+
+              '<img class="img-polaroid recommendation_image" src="' + get_img_url().replace('#{id}', rec_id)+'" data="'+ rec_id + '"></img>'+
             '</a>' +
-            '<h2 class="center">Rank: ' + item.rank + '</h2>' +
-            '<a class="center" target="_blank"  href="' + get_item_url().replace('#{id}', item.item_B) + '">To Item Page</a>'+
+            '<h2 class="center">Rank: ' + rank + '</h2>' +
+            '<a class="center" target="_blank"  href="' + get_item_url().replace('#{id}', rec_id) + '">To Item Page</a>'+
           '</div>'+
         '</li>'
       );
-
     };
   };
 
@@ -377,6 +438,21 @@ $.mortar_data.util.capitalize_first_letter = function(str){
   return str.charAt(0).toUpperCase() + str.slice(1); 
 };
 
+$.mortar_data.util.get_largest_array = function(json_obj){
+  var largest_array = []; //only one array will have content, so pick the largest
+  var count = 0;
+  for(key in json_obj){
+    if(json_obj[key] instanceof Array){
+      var curr_array = json_obj[key];
+      // biggest array
+      if(curr_array.length > count){
+        count  = curr_array.length;
+        largest_array = curr_array;
+      }
+    }
+  }
+  return largest_array;
+};
 
 (function(){
   var search_tables =[];
@@ -480,6 +556,7 @@ function MortarTable(table_container_id, array, options){
   this.fire_next_page_finish = options.next_callback || null;
   this.fire_previous_page_finish = options.previous_callback || null;
   this.clickable_column = options.clickable_column || null;
+  this.detail_button = options.detail_button || null;
 
   return this;
 };
@@ -581,7 +658,14 @@ MortarTable.prototype.draw_body_content = function(){
     
     var row = this.array[i];
     var $table_row = $('#' + this.table_body_id).append('<tr></tr>'); 
+    
     $table_row = $('#' + this.table_body_id + ' tr:last');
+    if(this.detail_button){
+      var link = row['column' + this.detail_button];
+      $table_row.append('<td>' + 
+          '<a class="btn btn-cell btn-primary" href="'+window.location.hash + '/' + link + '">Details</a></td>'
+        ); 
+    }
     for( var j = 0; j < key_array.length; j++){
       if (this.clickable_column == j){
         $table_row.append('<td><a  href="' + window.location.hash +'/'+ row[key_array[j]] + '">' + row[key_array[j] ] + '</a></td>');
@@ -605,10 +689,14 @@ MortarTable.prototype.draw_head_content = function(){
       table_header = '#' +this.table_header_id,
       table_body = '#'+this.table_body_id;
   if(array.length > 0){
-
+    
     $(table_header).append('<tr></tr>');
+    var $header = $(table_header + ' tr');
+    if (this.detail_button){
+      $header.append('<th></th>'); 
+    }
     for(var key = 0; key <  key_array.length; key++){
-      $(table_header + ' tr').append('<th>' + key_array[key] + '</th>'); 
+      $header.append('<th>' + key_array[key] + '</th>'); 
     }
     this.draw_body_content();
     

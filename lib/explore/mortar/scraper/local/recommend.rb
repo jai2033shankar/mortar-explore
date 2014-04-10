@@ -43,7 +43,6 @@ module Local
 
         raw_recs.push("#{file}:#{line}:#{contents}")
       end
-      print raw_recs
       return raw_recs
     end
 

@@ -23,8 +23,8 @@ class Mortar::Command::Explore < Mortar::Command::Base
 
   # explore RECSYS_RESULTS 
   #
-  # Watch a local script for changes, and illustrate data flowing through
-  # while you work.
+  # View the results of your pig job.  Specify the directory where
+  # the part files of the pig job exist
   #
   # -t, --port PORT  # What port the pig server should run on.
   # -r, --recsys     # A recsys specific option
@@ -45,29 +45,4 @@ class Mortar::Command::Explore < Mortar::Command::Base
   end
 
 
-  # voyage S3_BUCKET
-  #
-  # Explore through your results stored in an s3 bucket
-  #
-  # -t, --port PORT  # What port the pig server should run on.
-  # -l, --local DOWNLOAD_DIR # Download bucket to local machine for viewing, specify where to download to
-  #
-  # Examples:
-  #
-  #     $ mortar voyage s3://mortar-example
-  def voyage
-    s3_bucket = shift_argument
-    unless s3_bucket
-      error("Usage: mortar voyage S3_BUCKET\nMust specify bucket.")
-    end
-    ctrl = Mortar::Local::Controller.new
-
-    if options[:local]
-      ctrl.download_from_bucket(s3_bucket, options[:local])
-    end
-
-    ctrl.voyage(project, s3_bucket, options[:port])
-
-  end
-  alias_command "voyage", "explore:voyage"
 end
