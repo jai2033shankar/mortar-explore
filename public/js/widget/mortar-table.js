@@ -78,7 +78,6 @@ MortarTable.prototype.draw = function(){
         '</div>'
     );
     var that = this;
-    debugger;
     //$(this.table_id).tablesorter();
     /* Event handler for next page click */
     $('.'+this.next_page_class).click(function(){ /* Hack because we lose reference to this */

@@ -1,4 +1,13 @@
+$.mortar_data = $.mortar_data || {};
+$.mortar_data.browse_view = $.mortar_data.browse_view || {};
+
+
 (function(){
+
+  $.mortar_data.browse_view.init = function(){
+    init_browse();  
+  }
+
   var current_index = 1;
   var browse_table;
   /*  Controller Functions */
@@ -7,7 +16,7 @@
       page_limit: get_browse_by(),
       next_callback : fire_next_page,
       previous_callback : fire_previous_page,
-      detail_button: MODE == 'recsys'? 2: null
+      detail_button: MODE == 'recsys'? 1: null
     });
     $('#browse_update').click(fire_browse_update);  
     get_browse();
@@ -106,9 +115,6 @@
     return $('#browse_from').val(); 
   };
 
-  $(document).ready(function()  {
-      init_browse(); 
-  });
 
 })();
 

@@ -1,5 +1,13 @@
+$.mortar_data = $.mortar_data || {};
+$.mortar_data.search_view = $.mortar_data.search_view || {};
+
+
 (function(){
   var search_tables =[];
+  $.mortar_data.search_view.init = function(){
+    init_search();  
+  }
+
   function init_search(){
     $('#search_button').on('click', fire_search);  
   };
@@ -23,7 +31,7 @@
                     item,
                     {
                       page_limit : 50,
-                      clickable_column: MODE == 'recsys'? 1: null
+                      detail_button: MODE == 'recsys'? 1: null
                     }
                   ));
           }
@@ -31,7 +39,6 @@
         
       } 
       for(var i = 0; i < search_tables.length; i++){
-        debugger;
         search_tables[i].draw(); 
       }
     }else{
@@ -59,14 +66,9 @@
     if (search_field != ''){
       $.mortar_data.api.get_search(search_field, load_search, search_error);
     }else{
-
       $('#search_results').empty();
       fire_search_error('No search query was given.  Please specify'); 
     }
-    
   }
 
-  $(document).ready(function(){
-    init_search(); 
-  });
 })();

@@ -55,7 +55,7 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     var query = recommendation_data.length ? recommendation_data[0][get_item_select()] : get_query();
     IMAGE_URL = get_img_url();
     ITEM_URL = get_item_url();
-    $(item_id).attr('src',item_img_src.replace(' ', '-')); 
+    $(item_id).attr('src', item_img_src); 
     $('#item_id_text').text(query);
     $('#recommendation_list img').each(function(index, item){
       var item_id = $(item).attr('data');
@@ -129,12 +129,12 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
    * Url Generators
    */
   function generate_img_url(id){
-    return get_img_url().replace('#{id}', id);
+    return encodeURI(get_img_url().replace('#{id}', id));
   };
 
   function generate_item_img_src(){
     var query = recommendation_data.length ? recommendation_data[0][get_item_select()] : get_query();
-    return get_img_url().replace('#{id}', query);
+    return encodeURI(get_img_url().replace('#{id}', query));
   };
 
 
@@ -205,7 +205,7 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
     $('#recommendation_list').empty();
     for (var i=0; i < recommendations.length; i++){
       var item = recommendations[i]; 
-      var span_size = 2;// relative to span12 on bootstrap
+      var span_size = 3;// relative to span12 on bootstrap
       var rec_id = item[get_recommendation_select()];
       var rank = item[get_rank_select()];
       $('#recommendation_list').append(
@@ -214,7 +214,8 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
             '<a class="thumbnail" href="'+ get_base_hash() + '/'+ rec_id + '">'+
               '<img class="img-polaroid recommendation_image" src="' + get_img_url().replace('#{id}', rec_id)+'" data="'+ rec_id + '"></img>'+
             '</a>' +
-            '<h2 class="center">Rank: ' + rank + '</h2>' +
+            '<h3 class="center text-crop" >Item Id: ' +rec_id + '</h3>' +
+            '<h3 class="center">Rank: ' + rank + '</h3>' +
             '<a class="center" target="_blank"  href="' + get_item_url().replace('#{id}', rec_id) + '">To Item Page</a>'+
           '</div>'+
         '</li>'

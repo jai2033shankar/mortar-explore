@@ -4,6 +4,7 @@
 .flat-cell{white-space:nowrap}
 .form-cell{margin-top:0px}
 .hidden{display:none}
+.text-crop{overflow:hidden;text-overflow:ellipsis}
 #explore_container{margin-top:1em}
 .recommendation_image{height:6em;width:6em}
 .table_container{overflow:scroll}
