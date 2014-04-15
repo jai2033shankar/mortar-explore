@@ -95,7 +95,7 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
    * getters
    */
   function get_query(){
-    var hash = window.location.hash;
+    var hash = decodeURI(window.location.hash);
     return hash.substr(hash.search('/') +1 , hash.length);
   };
 

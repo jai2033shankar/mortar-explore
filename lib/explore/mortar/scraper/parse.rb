@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+require "uri"
 module Parse
   II_COUNT = 5
   UI_COUNT = 7
@@ -30,7 +30,11 @@ module Parse
   end
 
   def search_column(file, query, column, delim_char)
-    cmd = "awk -F '#{delim_char}' '$1==\"#{query}\" {print NR,$0}' #{file}"
+    sub_str = query.gsub("\"", '\\"')
+    sub_str = sub_str.gsub("'", "\047\042\047\042\047")
+    print sub_str
+    cmd = "awk -F '#{delim_char}' '$1==\"#{sub_str}\" {print NR,$0}' #{file}"
+    print cmd
     result = %x[#{cmd}]
   end
 

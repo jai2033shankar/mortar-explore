@@ -23,6 +23,14 @@ module Local
         results[:error].should eq(nil)
         results[:location].should eq("item_item_recs")
       end
+
+      it "returns the items for a complex recommendation" do
+        results = rec.get_recommendations('big', 'item_item_recs')
+        results[:generic_item].length.should eq(5)
+        results[:error].should eq(nil)
+        results[:location].should eq("item_item_recs")
+      end
+
     end
   end
 end

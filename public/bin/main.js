@@ -270,7 +270,7 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
    * getters
    */
   function get_query(){
-    var hash = window.location.hash;
+    var hash = decodeURI(window.location.hash);
     return hash.substr(hash.search('/') +1 , hash.length);
   };
 
@@ -674,7 +674,7 @@ MortarTable.prototype.draw_body_content = function(){
     
     $table_row = $('#' + this.table_body_id + ' tr:last');
     if(this.detail_button){
-      var link = row['column' + this.detail_button];
+      var link = encodeURI(row['column' + this.detail_button]);
       $table_row.append('<td class="flat-cell">' + 
           '<a class="btn btn-cell btn-primary" href="'+window.location.hash + '/' + link + '">Details</a></td>'
         ); 
