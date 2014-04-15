@@ -210,9 +210,9 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
       var rank = item[get_rank_select()];
       $('#recommendation_list').append(
         '<li class="span' + span_size + '">' + 
-          '<div class="well">' + 
+          '<div class="well recommendation-well">' + 
             '<a class="thumbnail" href="'+ get_base_hash() + '/'+ rec_id + '">'+
-              '<img class="img-polaroid recommendation_image" src="' + get_img_url().replace('#{id}', rec_id)+'" data="'+ rec_id + '"></img>'+
+                '<img onerror="this.src=\'images/default.png\'" class="img-polaroid recommendation_image" src="' + get_img_url().replace('#{id}', rec_id)+'" data="'+ rec_id + '"></img>'+
             '</a>' +
             '<h3 class="center text-crop" >Item Id: ' +rec_id + '</h3>' +
             '<h3 class="center">Rank: ' + rank + '</h3>' +

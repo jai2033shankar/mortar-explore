@@ -12,4 +12,5 @@
 #detail_content .panel{margin-bottom:2em}#detail_content .panel h1{padding-bottom:0.5em}
 #detail_content .panel .thumbnail{margin-bottom:0.95em}
 #detail_content #item_img{margin-left:auto;margin-right:auto;display:block;max-width:100%}
+#detail_content .recommendation-well{max-height:70%}
 table tbody{font-size:0.8em;word-break:break-word}

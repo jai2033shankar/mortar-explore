@@ -33,7 +33,7 @@ module Local
         error = "Search string found nothing.  Please specify again"
         results = []
       else
-        results = results.split("\n")
+        results = results.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').split("\n")
       end
       return parse_results(results, error) 
     end

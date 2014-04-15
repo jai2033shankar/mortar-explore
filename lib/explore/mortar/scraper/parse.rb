@@ -27,14 +27,13 @@ module Parse
   def get_lines_in_file(start_line, end_line, file)
     cmd = "sed -n '#{start_line},#{end_line}p' #{file}" 
     result = %x[#{cmd}]
+    return result
   end
 
   def search_column(file, query, column, delim_char)
     sub_str = query.gsub("\"", '\\"')
     sub_str = sub_str.gsub("'", "\047\042\047\042\047")
-    print sub_str
     cmd = "awk -F '#{delim_char}' '$1==\"#{sub_str}\" {print NR,$0}' #{file}"
-    print cmd
     result = %x[#{cmd}]
   end
 

@@ -47,6 +47,7 @@ module Local
       if file != nil 
         raw_browsed = Array.new
         result = get_lines_in_file(start_index, start_index + quantity-1, file)
+        #result = result.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
         i = start_index 
         for row in result.split("\n") do
           raw_browsed.push( file + ":" + i.to_s + ":" + row ) 

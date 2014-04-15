@@ -28,7 +28,9 @@ Mortar explore has a mode specific for viewing [recommendation results.](http://
 ```
 $ mortar explore RESULTS_DIRECTORY/item_item_recs -r
 ```
-This mode only works when viewing your item_item_recs so point directly to that directory.  Note that the dash `-r` sets up mortar explore to view recommendation results. On first use, you will be prompted for and Image URL and an Item URL. *Ensure that you add `http://` in front of the url!!*   These are urls that lead to your own applications where the images of your items are located and the pages of your item are located.  Each url will use the item id to identify the exact image or page to render.  The code looks for `#{id}` in the url to replace the id with.  To later change the url, go into the application, click an item and you will see a configuration section.  Hit the button and it will automatically update your default URLs.
+This mode only works when viewing your item_item_recs so point directly to that directory.  Note that the dash `-r` sets up mortar explore to view recommendation results. When you look at the browse and search page, you will notice that there is a details button.  Click it and you can see recommendations for an item in greater detail.
+
+*Ensure that you add `http://` in front of the url!!*   These are urls that lead to your own applications where the images of your items are located and the pages of your item are located.  Each url will use the item id to identify the exact image or page to render.  The code looks for `#{id}` in the url to replace the id with.  To later change the url, go into the application, click an item and you will see a configuration section.  Hit the button and it will automatically update your default URLs.
 
 Your browser should open up and you can start viewing your pig job results. You will notice that the first item in your recsys results is now a link.  Click it and you will be lead to a page containing an image at your specified Image URL, links that lead to your specified Item URL and all the recommended items.  
 

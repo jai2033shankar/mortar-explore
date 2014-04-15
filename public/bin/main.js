@@ -56,14 +56,19 @@ $.mortar_data.api.put_url_config = function(params){
 $.mortar_data = $.mortar_data || {};
 $.mortar_data.browse_view = $.mortar_data.browse_view || {};
 
+$.mortar_data.browse_view.current_index = $.mortar_data.browse_view.current_index || 1;
 
 (function(){
 
   $.mortar_data.browse_view.init = function(){
     init_browse();  
+    $.mortar_data.browse_view.exists = true;
   }
 
-  var current_index = 1;
+  $.mortar_data.browse_view.is_rendered = function(){
+    return $.mortar_data.browse_view.exists; 
+  };
+
   var browse_table;
   /*  Controller Functions */
   function init_browse(){
@@ -83,7 +88,7 @@ $.mortar_data.browse_view = $.mortar_data.browse_view || {};
   function get_browse(){
     $.mortar_data.api.get_browse(
       get_browse_by(), //quantity 
-      current_index, //index to start browse
+      get_current_index(), //index to start browse
       get_browse_from(), //directory to browse by 
       fire_reload_table,
       function(){
@@ -107,20 +112,18 @@ $.mortar_data.browse_view = $.mortar_data.browse_view || {};
     if(data_parsed.error == null){
       $('#browse_error_row').addClass('hidden');
       var largest_array = $.mortar_data.util.get_largest_array(data_parsed); //only one array will have content, so pick the largest
-      //current_index += largest_array.length; //update current index
       if(largest_array.length > 0){
-        current_index = ( Math.floor(current_index/get_browse_by() ) + 1 ) * 50 + 1;
+        set_current_index((Math.floor(get_current_index()/get_browse_by() ) + 1 ) * 50 + 1);
         browse_table.set_array(largest_array);
         browse_table.draw();
       } else{
-//fire_browse_error('No file could be found in this directory.  Please specify.'); 
       } 
      
     } else{
       fire_browse_error(data_parsed.error);
     }
     //Checks indexed number for browse
-    if(current_index > (get_browse_by() + 1))
+    if(get_current_index() > (get_browse_by() + 1))
       $('.browse_previous_page').removeAttr('disabled');
     else
       $('.browse_previous_page').attr('disabled', 'disabled');
@@ -138,14 +141,22 @@ $.mortar_data.browse_view = $.mortar_data.browse_view || {};
    * Event when back content is clicked
    */
   function fire_previous_page(){
-    current_index = (Math.floor(current_index/get_browse_by())-2)*50 +1;
-    current_index = current_index <=0 ? 1 : current_index;
+    set_current_index( (Math.floor(get_current_index()/get_browse_by())-2)*50 +1);
+    set_current_index(get_current_index() <=0 ? 1 : get_current_index());
     get_browse(); 
       
   };
 
+  function set_current_index(value){
+    $.mortar_data.browse_view.current_index = value;
+  };
+
+  function get_current_index(){
+    return $.mortar_data.browse_view.current_index; 
+  };
+
   function fire_browse_update(){
-    current_index = 1;
+    set_current_index(1);
     get_browse();
   };
 
@@ -385,9 +396,9 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
       var rank = item[get_rank_select()];
       $('#recommendation_list').append(
         '<li class="span' + span_size + '">' + 
-          '<div class="well">' + 
+          '<div class="well recommendation-well">' + 
             '<a class="thumbnail" href="'+ get_base_hash() + '/'+ rec_id + '">'+
-              '<img class="img-polaroid recommendation_image" src="' + get_img_url().replace('#{id}', rec_id)+'" data="'+ rec_id + '"></img>'+
+                '<img onerror="this.src=\'images/default.png\'" class="img-polaroid recommendation_image" src="' + get_img_url().replace('#{id}', rec_id)+'" data="'+ rec_id + '"></img>'+
             '</a>' +
             '<h3 class="center text-crop" >Item Id: ' +rec_id + '</h3>' +
             '<h3 class="center">Rank: ' + rank + '</h3>' +
@@ -423,7 +434,7 @@ $.mortar_data.details_view = $.mortar_data.details_view || {};
       $('#detail_content').removeClass('hidden'); 
       $.mortar_data.details_view.init();
     }else{
-      if(hash === '#browse'){
+      if(hash === '#browse' && !$.mortar_data.browse_view.is_rendered()){
         $.mortar_data.browse_view.init();
       }else if(hash === '#search'){
         $.mortar_data.search_view.init();

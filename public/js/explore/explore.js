@@ -22,7 +22,7 @@
       $('#detail_content').removeClass('hidden'); 
       $.mortar_data.details_view.init();
     }else{
-      if(hash === '#browse'){
+      if(hash === '#browse' && !$.mortar_data.browse_view.is_rendered()){
         $.mortar_data.browse_view.init();
       }else if(hash === '#search'){
         $.mortar_data.search_view.init();
