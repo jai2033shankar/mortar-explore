@@ -3,7 +3,7 @@
 Mortar Explore is a plugin for the [Mortar Gem](https://github.com/mortardata/mortar). It is custom built for participants for the self-serve recommender program.  However, it is being extended for all mortar users!
 
 
-### Installation ###
+### Installation 
 
 Before getting started make sure you already have [Mortar installed](http://help.mortardata.com/reference/mortar_project_reference/install_mortar_development_framework).
 
@@ -12,7 +12,7 @@ $ gem install bundler
 $ mortar plugins:install https://github.com/mortardata/mortar-explore.git
 ```
 
-### Usage ###
+### Usage 
 
 To start exploring your results:
 
@@ -22,7 +22,7 @@ $ mortar explore  RESULTS_DIRECTORY
 
 The RESULTS_DIRECTORY should be where the pig script stores all the recsys results (don't point to an actual file as mortar explore will automatically look for the part file).
 
-#### Mortar Recsys Specific ####
+#### Mortar Recsys Specific 
 
 Mortar explore has a mode specific for viewing [recommendation results.](http://help.mortardata.com/recommendation_engine_tutorial/landing_page/recommendation_engine_tutorial_overview.html) This time, run:
 ```
@@ -30,12 +30,13 @@ $ mortar explore RESULTS_DIRECTORY/item_item_recs -r
 ```
 This mode only works when viewing your item_item_recs so point directly to that directory.  Note that the dash `-r` sets up mortar explore to view recommendation results. When you look at the browse and search page, you will notice that there is a details button.  Click it and you can see recommendations for an item in greater detail.
 
-*Ensure that you add `http://` in front of the url!!*   These are urls that lead to your own applications where the images of your items are located and the pages of your item are located.  Each url will use the item id to identify the exact image or page to render.  The code looks for `#{id}` in the url to replace the id with.  To later change the url, go into the application, click an item and you will see a configuration section.  Hit the button and it will automatically update your default URLs.
+In the details page, you can see that the bottom has configuration settings that need to be set.  *Ensure that you add `http://` in front of the url!!*   These are urls that lead to your own applications where the images of your items are located and the pages of your item are located.  Each url will use the item id to identify the exact image or page to render.  The code looks for `#{id}` in the url to replace the id with.  To later change the url, go into the application, click an item and you will see a configuration section.  Hit the button and it will automatically update your default URLs.
 
-Your browser should open up and you can start viewing your pig job results. You will notice that the first item in your recsys results is now a link.  Click it and you will be lead to a page containing an image at your specified Image URL, links that lead to your specified Item URL and all the recommended items.  
+You also need to set the corresponding columns to match your data output.  You need to set the selected item, the recommended item IDs, and the rank of the recommended item.  
 
+For default, set Selected Item to 'column1', Recommended Item to 'column2' and Rank to 'column5'
 
-### Mortar Explore Example ###
+### Mortar Explore Example
 
 Begin by downloading the [mortar-explore-demo](https://github.com/mortarcode/mortar-explore-demo).  Go to the root of the project and run:
 ```
@@ -50,18 +51,6 @@ And for item URL, enter:
 ```
 http://www.amazon.com/s?ie=UTF8&field-isbn=#{id}
 ```
-
-
-#### Mortar Voyage ####
-
-The second use of Mortar Explore is to voyage (it is a little more adventurous than explore) into your S3 bucket. In this mode, you can browse through your recsys results without downloading the entire file. Ths is great for getting a quick glance at your results without downloading it for further analysis. This can be done by running:
-
-```
-$ mortar voyage S3_BUCKET
-```
-
-This will run the same interface to browse through your results. Once again, point to the directory where your part files are contained as it will automatically look for your part file.
-
 
 
 
