@@ -13,18 +13,12 @@
 # limitations under the License.
 #
 require 'explore/mortar/scraper/parse' 
+require 'explore/mortar/scraper/scraper' 
 
 module Local
-  class Browse
+  class Browse < Scraper
     include Parse
 
-    attr_accessor :base_directory, :delim_char, :index
-
-    def initialize(base_directory, delim_char = "\t")
-      @base_directory = base_directory
-      @delim_char = delim_char 
-      @index = 1
-    end
 
 
     

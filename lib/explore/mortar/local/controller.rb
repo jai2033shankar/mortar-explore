@@ -52,31 +52,6 @@ class Mortar::Local::Controller
 
   end
 
-  def voyage(project, s3_path, directory = nil, port = 3000)
-    require_aws_keys
-    
-    explorer = Mortar::Local::Explorer.new(project.root_path)
-
-    Server.set :mode, "cloud" 
-    Server.set :data_directory, s3_path 
-    Server.set :project_root, project.root_path
-    Server.set :searcher, nil 
-    Server.set :browser, Cloud::Browse.new(s3_path)
-
-    begin
-      server = Thin::Server.new(Server, '0.0.0.0', port, :signals => false)
-    rescue => e
-      print 'error'
-    end
-
-    launch_browser(port)
-    server.start
-
-
-    # Startup Web Server
-  end
-
-
 
   private
 

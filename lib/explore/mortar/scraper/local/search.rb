@@ -14,15 +14,11 @@
 # limitations under the License.
 #
 require 'explore/mortar/scraper/parse' 
+require 'explore/mortar/scraper/scraper' 
 
 module Local
-  class Search
+  class Search < Scraper
     include Parse
-    attr_accessor :base_directory, :delim_char
-    def initialize(base_directory, delim_char = "\t")
-      @base_directory = base_directory
-      @delim_char = delim_char 
-    end
     
     def search(query)
       cmd = "grep -rn '" + query + "' " +  @base_directory 
