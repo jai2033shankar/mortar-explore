@@ -46,7 +46,7 @@ module Cloud
         browse_two.object_key.should eq('fake')
 
         browse_three.bucket.should eq('spec')
-        browse_three.object_key.should eq('fake')
+        browse_three.object_key.should eq('fake/')
 
       end
 

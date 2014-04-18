@@ -18,8 +18,6 @@ class Mortar::Local::Explorer
     EXPLORER_LOG_FILE = "explore-explorer.log"
     CONFIG_FILE = File.expand_path "~/.mortar-explore-config"
 
-    # Public: Initialize the watcher utility
-    #
     # project_root_path
     #
     # Returns an Explorer object
@@ -40,10 +38,11 @@ class Mortar::Local::Explorer
 
     def set_config(image_url, item_url, item_key, recommendation_key, rank_key)
       f = File.open(CONFIG_FILE, 'w')
-      f.write("image_url ~> #{image_url}\nitem_url ~> #{item_url}")
-      f.write("\nitem_key ~> #{item_key}")
-      f.write("\nrecommendation_key ~> #{recommendation_key}")
-      f.write("\nrank_key ~> #{rank_key}")
+      f.puts("image_url ~> #{image_url}")
+      f.puts("item_url ~> #{item_url}")
+      f.puts("item_key ~> #{item_key}")
+      f.puts("recommendation_key ~> #{recommendation_key}")
+      f.puts("rank_key ~> #{rank_key}")
       f.close()
     end
 

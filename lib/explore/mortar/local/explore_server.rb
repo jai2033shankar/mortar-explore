@@ -16,7 +16,8 @@
 
 require 'sinatra/base'
 
-class Server < Sinatra::Base
+class ExploreServer < Sinatra::Base
+
   # Load the basic page 
   get '/' do
     @search_template = File.read(settings.resource_locations["search"]).to_s
@@ -70,11 +71,11 @@ class Server < Sinatra::Base
 
 
   put '/api/v1/config' do
-    image_url = (params[:image_url] == nil or params[:image_url] == "") ?  settings.image_url : params[:image_url]
-    item_url = (params[:item_url] == nil or params[:item_url] == "") ?  settings.item_url : params[:item_url]
-    item_key = (params[:item_key] == nil or params[:item_key] == "") ?  settings.item_key : params[:item_key]
-    recommendation_key = (params[:recommendation_key] == nil or params[:recommendation_key] == "") ?  settings.recommendation_key : params[:recommendation_key]
-    rank_key = (params[:rank_key] == nil or params[:rank_key] == "") ?  settings.rank_key : params[:rank_key]
+    image_url = (params[:image_url] == nil) ?  settings.image_url : params[:image_url]
+    item_url = (params[:item_url] == nil) ?  settings.item_url : params[:item_url]
+    item_key = (params[:item_key] == nil) ?  settings.item_key : params[:item_key]
+    recommendation_key = (params[:recommendation_key] == nil ) ?  settings.recommendation_key : params[:recommendation_key]
+    rank_key = (params[:rank_key] == nil) ?  settings.rank_key : params[:rank_key]
     settings.image_url = image_url
     settings.item_url = item_url 
     settings.item_key = item_key
@@ -82,6 +83,7 @@ class Server < Sinatra::Base
     settings.rank_key = rank_key 
 
     print 'saving configurations...'
+    print params
 
     settings.explorer.set_config image_url, item_url, item_key, recommendation_key, rank_key
   end
@@ -93,8 +95,8 @@ end
 
 # Globally set certain server attributes
 public_folder_str = "../../../../../public"
-Server.set :public_folder, File.expand_path( public_folder_str,__FILE__)
-Server.set(:resource_locations, {
+ExploreServer.set :public_folder, File.expand_path( public_folder_str,__FILE__)
+ExploreServer.set(:resource_locations, {
   "index" => File.expand_path(public_folder_str + "/index.html", __FILE__),
   "search" => File.expand_path(public_folder_str + "/templates/search.html", __FILE__),
   "detail" => File.expand_path(public_folder_str + "/templates/details.html", __FILE__),

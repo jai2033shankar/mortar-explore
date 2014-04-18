@@ -19,36 +19,38 @@ require 'explore/mortar/scraper/local/browse'
 require 'explore/mortar/scraper/local/recommend'
 require 'explore/mortar/scraper/cloud/browse'
 require "mortar/local/controller"
+require "explore/mortar/local/explore_server"
 
 class Mortar::Local::Controller
   def explore(project, data_directory, port, recsys=nil)
     port ||= 3000 
     explorer = Mortar::Local::Explorer.new(project.root_path)
     # Startup Web server
-    Server.set :mode, recsys ? "recsys" : "local"
+    ExploreServer.set :mode, recsys ? "recsys" : "local"
   
-    Server.set :data_directory, data_directory 
-    Server.set :project_root, project.root_path
-    Server.set :searcher, Local::Search.new(data_directory)
-    Server.set :browser, Local::Browse.new(data_directory)
-    Server.set :recommender, recsys ? Local::Recommend.new(data_directory) : nil
-    Server.set :explorer, explorer
+    ExploreServer.set :data_directory, data_directory 
+    ExploreServer.set :project_root, project.root_path
+    ExploreServer.set :searcher, Local::Search.new(data_directory)
+    ExploreServer.set :browser, Local::Browse.new(data_directory)
+    ExploreServer.set :recommender, recsys ? Local::Recommend.new(data_directory) : nil
+    ExploreServer.set :explorer, explorer
     if recsys
       image_url, item_url, item_key, recommendation_key, rank_key  =  explorer.get_config
-      Server.set :image_url, image_url
-      Server.set :item_url, item_url
-      Server.set :item_key, item_key 
-      Server.set :recommendation_key, recommendation_key 
-      Server.set :rank_key, rank_key 
+      ExploreServer.set :image_url, image_url
+      ExploreServer.set :item_url, item_url
+      ExploreServer.set :item_key, item_key 
+      ExploreServer.set :recommendation_key, recommendation_key 
+      ExploreServer.set :rank_key, rank_key 
     end
     begin
-      server = Thin::Server.new(Server, '0.0.0.0', port, :signals => false)
+      server = Thin::Server.new(ExploreServer, '0.0.0.0', port, :signals => false)
     rescue => e
       print 'error'
     end
 
     launch_browser(port)
     server.start
+    #server.run
 
   end
 
