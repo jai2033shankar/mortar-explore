@@ -27,7 +27,11 @@ class Mortar::Command::Explore < Mortar::Command::Base
   # the part files of the pig job exist
   #
   # -t, --port PORT  # What port the pig server should run on.
-  # -r, --recsys     # A recsys specific option
+  # -r, --recsys     # Option to render a details page that is 
+  #                  # specific for the recommendation engine 
+  #                  # results.  If your project is forked from 
+  #                  # mortar-recsys, the default will always 
+  #                  # render in this mode 
   #
   # Examples:
   #
@@ -39,9 +43,11 @@ class Mortar::Command::Explore < Mortar::Command::Base
     end
     validate_arguments!
     ctrl = Mortar::Local::Controller.new
-    
+  
 
-    ctrl.explore(project, results_data, options[:port], options[:recsys])
+    defaults = load_defaults('DEFAULTS')
+
+    ctrl.explore(project, results_data, options[:port], defaults[:recsys] || options[:recsys])
   end
 
 

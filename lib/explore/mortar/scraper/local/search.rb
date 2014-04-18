@@ -21,17 +21,17 @@ module Local
     include Parse
     
     def search(query)
-      cmd = "grep -rn '" + query + "' " +  @base_directory 
-      results = %x[#{cmd}]
+      results = search_directory(query, @base_directory)
       error = nil
-
       if (results == nil or results == "")
         error = "Search string found nothing.  Please specify again"
         results = []
       else
-        results = results.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').split("\n")
+        results = results.split("\n")#.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').split("\n")
       end
       return parse_results(results, error) 
     end
+
+
   end
 end

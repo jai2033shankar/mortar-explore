@@ -14,16 +14,11 @@
 # limitations under the License.
 #
 require 'explore/mortar/scraper/parse' 
+require 'explore/mortar/scraper/scraper' 
 
 module Local
-  class Recommend
+  class Recommend < Scraper
     include Parse
-    attr_accessor :base_directory, :delim_char
-
-    def initialize(base_directory, delim_char = "\t")
-      @base_directory = base_directory
-      @delim_char = delim_char 
-    end
 
     def get_recommendations(item_id, directory_or_file)
       raw_recommendations = get_recommendations_from_directory(item_id, directory_or_file)

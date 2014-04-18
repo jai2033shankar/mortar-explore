@@ -18,9 +18,6 @@ require 'explore/mortar/scraper/scraper'
 module Local
   class Browse < Scraper
     include Parse
-
-
-
     
     # gets a quantity amount of  certain lines from an index   
     #    quantity - how many lines of data will be returned
@@ -36,16 +33,15 @@ module Local
 
 
     def browse_from_directory(quantity, start_index, directory_or_file)
-      directory_or_file = directory_or_file == nil ?  @base_directory : @base_directory + "/" + directory_or_file
+      directory_or_file = directory_or_file == nil ?  @base_directory :"#{@base_directory}/#{directory_or_file}"
       file = find_file(directory_or_file)
       if file != nil 
         raw_browsed = Array.new
         result = get_lines_in_file(start_index, start_index + quantity-1, file)
-        #result = result.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
         i = start_index 
         for row in result.split("\n") do
           raw_browsed.push( file + ":" + i.to_s + ":" + row ) 
-          i = i + 1 
+          i += 1 
         end
         error = nil
         if raw_browsed.length == 0

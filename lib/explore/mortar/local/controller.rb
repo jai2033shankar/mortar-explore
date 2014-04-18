@@ -24,9 +24,9 @@ class Mortar::Local::Controller
   def explore(project, data_directory, port, recsys=nil)
     port ||= 3000 
     explorer = Mortar::Local::Explorer.new(project.root_path)
-
     # Startup Web server
     Server.set :mode, recsys ? "recsys" : "local"
+  
     Server.set :data_directory, data_directory 
     Server.set :project_root, project.root_path
     Server.set :searcher, Local::Search.new(data_directory)

@@ -16,7 +16,7 @@
         <p class="text-crop"><small>Image URL: <span id="image_link_text"></span></small></p>
         <hr/>
         <p>Item ID: <span id="item_id_text"></span></p>
-        <p class="text-crop"><small>Item URL: <span id="item_link_text"></span></small></p>
+        <p class="text-crop" id="item_link_p"><small>Item URL: <span id="item_link_text"></span></small></p>
         <a target="_blank" class="center" id="item_link">To Item Page</a>
       </div>
     </div>
@@ -28,9 +28,9 @@
       <select type="" class="span3"id="recommendation_select"></select>
       <label class="" for="rank_select">Rank Column<i data-toggle="tooltip" title="Column corresponding with recommended item ranks" class="icon-question-sign"></i></label>
       <select type="" class="span3"id="rank_select"></select>
-      <label class="" for="image_url">Image URL<i data-toggle="tooltip" title="The url that links to your images.  Ensure that your URL has a ID tag, #{id}, which is replaced with your item ID.  The url must begin with 'http://'"class="icon-question-sign"></i></label>
+      <label class="" for="image_url">Image URL<i data-toggle="tooltip" title="The url that links to your images.  Ensure that your URL has a ID tag, #{id}, which is replaced with your item ID.  The url must begin with 'http://'. Example: 'http://mywebsite.com/images/#{id}" class="icon-question-sign"></i></label>
       <input type="text" class="span6"id="image_url">
-      <label class="" for="item_url">Item URL<i data-toggle="tooltip" title="The url that links to your images.  Ensure that your URL has a ID tag, #{id}, which is replaced with your item ID.  The url must begin with 'http://'" class="icon-question-sign"></i></label>
+      <label class="" for="item_url">Item URL<i data-toggle="tooltip" title="The url that links to your images.  Ensure that your URL has a ID tag, #{id}, which is replaced with your item ID.  The url must begin with 'http://' Example: 'http://mywebsite.com/#{id}" class="icon-question-sign"></i></label>
       <input type="text" class="span6" id="item_url">
       <button class="btn btn-primary" id="update_url" type="button">Apply URL Changes</button>
     </div>
@@ -43,13 +43,3 @@
     </div>
   </div>
 </div>
-<!--<div class="row">
-  <div class="span6">
-    <label class="" for="image_url">Image URL</label>
-    <input type="text" class="span6"id="image_url">
-    <label class="" for="item_url">Item URL</label>
-    <input type="text" class="span6" id="item_url">
-    <button class="btn btn-primary" id="update_url" type="button">Apply URL Changes</button>
-  </div>
-</div>
--->

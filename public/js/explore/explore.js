@@ -16,7 +16,6 @@
     $('#explore_nav li').removeClass('active');
     $('.explore_content').addClass('hidden');
     var hash = window.location.hash;
-    debugger;
     if (hash.search('/')>0){
       $('#detail_item').addClass('active');
       $('#detail_content').removeClass('hidden'); 

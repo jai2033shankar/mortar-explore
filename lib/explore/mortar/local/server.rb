@@ -81,7 +81,7 @@ class Server < Sinatra::Base
     settings.recommendation_key = recommendation_key 
     settings.rank_key = rank_key 
 
-    display 'saving configurations...'
+    print 'saving configurations...'
 
     settings.explorer.set_config image_url, item_url, item_key, recommendation_key, rank_key
   end

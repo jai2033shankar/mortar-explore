@@ -31,10 +31,20 @@ module Parse
   end
 
   def search_column(file, query, column, delim_char)
-    sub_str = query.gsub("\"", '\\"')
-    sub_str = sub_str.gsub("'", "\047\042\047\042\047")
-    cmd = "awk -F '#{delim_char}' '$1==\"#{sub_str}\" {print NR,$0}' #{file}"
+    extracted = extract_special_characters(query)
+    cmd = "awk -F '#{delim_char}' '$1==\"#{extracted}\" {print NR,$0}' #{file}"
     result = %x[#{cmd}]
+  end
+
+  def search_directory(query, directory)
+    extracted = extract_special_characters(query) 
+    cmd = "grep -rn '" + extracted + "' " +  directory 
+    results = %x[#{cmd}]
+  end
+
+  def extract_special_characters(query)
+    extracted = query.gsub("\"", '\\"')
+    extracted = extracted.gsub("'", "\047\042\047\042\047")
   end
 
   def find_file(directory_or_file)
@@ -45,9 +55,8 @@ module Parse
       for item in all_contents do
         relative_path = "#{directory_or_file}/#{item}"
 
-        if File.exists?(relative_path) && ! File.directory?(relative_path)
-          # TODO -- sort and use real file names
-          if (item[0,1] != "." and item[0,1] != "_")
+        if is_file(relative_path)
+          if ! is_hidden_file(item)
             contents.push(item)
           end
         end
@@ -61,6 +70,14 @@ module Parse
     end
     return file
   end
+
+  def is_hidden_file(item)
+    item[0,1] == "." || item[0,1] == "_"
+  end
+
+  def is_file(relative_path)
+    File.exists?(relative_path) && ! File.directory?(relative_path)
+  end
     
 
   # parse results from a string array 
@@ -70,9 +87,7 @@ module Parse
   #           this fails if a directory name has ':' in it
   def parse_results(input_array, error= nil, mode="local")
     results = {
-      #:item_item_recs => Array.new,
       :generic_item => Array.new,
-      #:user_item_recs => Array.new,
       :error => error 
     }
     input_array.each do |row|
@@ -80,56 +95,12 @@ module Parse
         search_data = row.split(':', 3)
         row_data = search_data[2].split(delim_char).map(&:strip)
         parse_generic_item(row_data, search_data, results[:generic_item])
-      #  if row_data.length == II_COUNT  
-      #    parse_item_item(row_data, search_data, results[:item_item_recs])
-      #  elsif row_data.length == UI_COUNT
-      #    parse_user_item(row_data, search_data, results[:user_item_recs])
-      #  else
-      #    parse_generic_item(search_data[2], search_data, results[:generic_item])
-      #  end
       rescue
       end
     end 
     return results 
   end
   
-  # Parses the row data and search data by pushing it to the item-item array
-  #     row_data - see macro output for detailed schema, follows the schema
-  #     search_data - metadata and each row including [ FILE_NAME, LINE_NUMBER]
-  #     arr - resulting array hash map is pushed to
-  def parse_item_item(row_data, search_data, arr)
-    
-    arr.push({
-      :line => search_data[1],
-      :item_A => row_data[0], 
-      :item_B => row_data[1], 
-      :weight => row_data[2], 
-      :raw_weight => row_data[3], 
-      :rank => row_data[4],
-      :type => "item_item",
-      :file => search_data[0],
-    }) 
-  end
-
-  # Parses the row data and search data by pushing it to the user-item array
-  #     row_data - see macro output for detailed schema, follows the schema
-  #     search_data - metadata and each row including [ FILE_NAME, LINE_NUMBER]
-  #     arr - resulting array hash map is pushed to
-  def parse_user_item(row_data, search_data, arr)
-    arr.push({
-      :line => search_data[1],
-      :user => row_data[0],
-      :item => row_data[1],
-      :weight => row_data[2],
-      :reason_item => row_data[3],  
-      :user_reason_item_weight => row_data[4],  
-      :item_reason_item_weight => row_data[5],  
-      :rank => row_data[6],
-      :type => "user_item",
-      :file => search_data[0]
-    })
-  end
-
   def parse_generic_item(row_data, search_data, arr)
     hash = {} 
     hash["line"] = search_data[1]
@@ -142,7 +113,6 @@ module Parse
     hash["file"] = search_data[0] 
     arr.push(hash)
   end
-  
 
 end
   
