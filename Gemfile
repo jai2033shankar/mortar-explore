@@ -7,6 +7,7 @@ gem 'thin'
 
 gem 'listen'
 gem 'eventmachine'
+gem 'sinatra'
 
 gem 'json'
 gem 'mortar'
