@@ -26,12 +26,13 @@ class Mortar::Command::Explore < Mortar::Command::Base
   # View the results of your pig job.  Specify the directory where
   # the part files of the pig job exist
   #
-  # -t, --port PORT  # What port the pig server should run on.
+  # -t, --port PORT  # What port mortar explore should run on.
   # -r, --recsys     # Option to render a details page that is 
   #                  # specific for the recommendation engine 
   #                  # results.  If your project is forked from 
   #                  # mortar-recsys, the default will always 
-  #                  # render in this mode 
+  #                  # render in this mode and you do not need 
+  #                  # to pass this option
   #
   # Examples:
   #
@@ -46,6 +47,9 @@ class Mortar::Command::Explore < Mortar::Command::Base
   
 
     defaults = load_defaults('DEFAULTS')
+    if defaults == nil
+      defaults = {:recsys => nil}
+    end
 
     ctrl.explore(project, results_data, options[:port], defaults[:recsys] || options[:recsys])
   end
