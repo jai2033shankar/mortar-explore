@@ -10,7 +10,6 @@ gem 'eventmachine'
 gem 'sinatra'
 
 gem 'json'
-gem 'mortar'
 
 
 group :development do
