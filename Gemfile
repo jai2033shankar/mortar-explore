@@ -1,22 +1,6 @@
-source 'https://rubygems.org'
-gem 'rb-inotify', :require => false
-gem 'rb-fsevent', :require => false
-gem 'rb-fchange', :require => false
+source "http://rubygems.org"
 
-gem 'thin'
+# Uncomment for local development
+#gem "mortar-api-ruby", :path => "~/code/mortar-api-ruby"
 
-gem 'listen'
-gem 'eventmachine'
-gem 'sinatra'
-
-gem 'json'
-gem 'mortar'
-
-
-group :development do
-  gem 'rake'
-  gem 'therubyracer'
-  gem 'less'
-  gem 'rspec'
-  gem 'rr'
-end
+gemspec
